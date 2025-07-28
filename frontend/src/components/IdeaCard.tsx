@@ -1,5 +1,5 @@
 import React from 'react';
-import { Idea } from '../types';
+import { Idea } from '../types/index.ts';
 import { FaMoneyBillWave, FaClock, FaMapMarkerAlt, FaStar } from 'react-icons/fa';
 
 interface IdeaCardProps {
@@ -49,13 +49,19 @@ const IdeaCard: React.FC<IdeaCardProps> = ({ idea, onClick }) => {
             {idea.difficultyLevel || 'Medium'}
           </span>
         </div>
+        {/* Investment Badge */}
+        <div className="absolute top-2 left-2">
+          <span className="bg-yellow-400 text-blue-900 text-xs px-2 py-1 rounded font-medium">
+            {formatCurrency(idea.investmentNeeded)}
+          </span>
+        </div>
       </div>
 
       {/* Content */}
       <div className="p-4">
         {/* Category Badge */}
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-1 rounded-full">
+          <span className="text-xs font-medium text-blue-900 bg-blue-50 px-2 py-1 rounded-full">
             {idea.category}
           </span>
           <span className="text-xs text-gray-500">
