@@ -17,26 +17,38 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-blue-900 hover:bg-blue-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg;
   }
-  
+
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg;
   }
-  
+
   .card {
-    @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden;
+    @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100;
   }
-  
+
   .idea-card {
-    @apply card cursor-pointer transform hover:scale-105 transition-transform duration-200;
+    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden cursor-pointer;
   }
-  
+
   .filter-chip {
-    @apply bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer;
+    @apply bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors cursor-pointer;
   }
-  
+
   .filter-chip.active {
+    @apply bg-blue-600 text-white;
+  }
+
+  .dropdown-item {
+    @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors;
+  }
+
+  .search-input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400;
+  }
+
+  .primary-button {
     @apply bg-blue-900 text-white hover:bg-blue-800;
   }
 
@@ -55,4 +67,66 @@
   .nav-link.active {
     @apply text-blue-900 border-b-2 border-yellow-400 pb-1;
   }
+
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Scrollbar hiding */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+} 
+
+/* Custom animations for the 3D rocket */
+@keyframes rocket-fly {
+  0% {
+    transform: rotate(12deg) translateY(20px) translateX(-10px);
+  }
+  50% {
+    transform: rotate(12deg) translateY(-10px) translateX(5px);
+  }
+  100% {
+    transform: rotate(12deg) translateY(20px) translateX(-10px);
+  }
+}
+
+.animate-rocket-fly {
+  animation: rocket-fly 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 } 

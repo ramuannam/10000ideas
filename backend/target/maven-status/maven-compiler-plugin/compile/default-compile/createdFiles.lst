@@ -1,0 +1,7 @@
+com\ideafactory\model\Idea.class
+com\ideafactory\service\IdeaService.class
+com\ideafactory\repository\IdeaRepository.class
+com\ideafactory\controller\IdeaController.class
+com\ideafactory\IdeasApplication$1.class
+com\ideafactory\config\DataInitializer.class
+com\ideafactory\IdeasApplication.class
