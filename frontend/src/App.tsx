@@ -10,6 +10,9 @@ import Footer from './layouts/Footer.tsx';
 import SubmitIdeaPage from './pages/SubmitIdeaPage.tsx';
 import AllIdeasPage from './pages/AllIdeasPage.tsx';
 import AboutUsPage from './pages/AboutUsPage.tsx';
+import AdminLoginPage from './pages/AdminLoginPage.tsx';
+import AdminDashboard from './pages/AdminDashboard.tsx';
+import UploadHistoryPage from './pages/UploadHistoryPage.tsx';
 import { MAIN_CATEGORIES } from './constants/categories.ts';
 import { HARDCODED_IDEAS } from './constants/allIdeas.ts';
 import IdeaCardGrid from './components/AllIdeas/IdeaCardGrid.tsx';
@@ -731,12 +734,17 @@ const IdeaDetailPage: React.FC = () => {
 const App: React.FC = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/submit-idea" element={<SubmitIdeaPage />} />
-        <Route path="/all-ideas" element={<AllIdeasPage />} />
-        <Route path="/about-us" element={<AboutUsPage />} />
-        <Route path="/idea/:id" element={<IdeaDetailPage />} />
+              <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/submit-idea" element={<SubmitIdeaPage />} />
+          <Route path="/all-ideas" element={<AllIdeasPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/idea/:id" element={<IdeaDetailPage />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/upload-history" element={<UploadHistoryPage />} />
       </Routes>
     </Router>
   );

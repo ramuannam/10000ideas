@@ -24,7 +24,9 @@ const AllIdeasPage: React.FC = () => {
     toggleFavorite,
     handleCardClick,
     totalIdeas,
-    filteredCount
+    filteredCount,
+    loading,
+    error
   } = useAllIdeas();
 
   const openAuthModal = (mode: 'signin' | 'signup') => {
@@ -86,6 +88,43 @@ const AllIdeasPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Stats */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Total Ideas</h3>
+            <p className="text-3xl font-bold text-blue-600">{totalIdeas}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Filtered Results</h3>
+            <p className="text-3xl font-bold text-green-600">{filteredCount}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Categories</h3>
+            <p className="text-3xl font-bold text-purple-600">{filterData.categories.length}</p>
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="mt-2 text-gray-600">Loading ideas...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-red-800">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
         <div className="flex gap-8">
           {/* Filter Sidebar */}

@@ -3,6 +3,8 @@ package com.ideafactory.service;
 import com.ideafactory.model.Idea;
 import com.ideafactory.repository.IdeaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -82,5 +84,30 @@ public class IdeaService {
     
     public void deleteIdea(Long id) {
         ideaRepository.deleteById(id);
+    }
+    
+    // Pagination method for admin panel
+    public Page<Idea> getAllIdeasPaginated(Pageable pageable, String search, String category, String sector, 
+                                         String difficultyLevel, String location, BigDecimal maxInvestment, 
+                                         String targetAudience, String specialAdvantage) {
+        
+        if (search != null && !search.trim().isEmpty()) {
+            // If search term provided, use search with filters
+            return ideaRepository.findBySearchWithFilters(search, category, sector, difficultyLevel, 
+                                                         location, maxInvestment, targetAudience, specialAdvantage, pageable);
+        } else {
+            // Use comprehensive filtering
+            return ideaRepository.findWithAllFilters(category, sector, difficultyLevel, location, 
+                                                   maxInvestment, targetAudience, specialAdvantage, pageable);
+        }
+    }
+    
+    // Count methods for dashboard statistics
+    public long getTotalIdeasCount() {
+        return ideaRepository.count();
+    }
+    
+    public long getActiveIdeasCount() {
+        return ideaRepository.countByActiveTrue();
     }
 } 

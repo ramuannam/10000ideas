@@ -1,10 +1,78 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { IdeaCard, FilterOptions } from '../types/allIdeas.ts';
-import { FILTER_DATA, INITIAL_FILTERS, HARDCODED_IDEAS } from '../constants/allIdeas.ts';
+import { FILTER_DATA, INITIAL_FILTERS } from '../constants/allIdeas.ts';
+import { ideaService } from '../services/api.ts';
 
 export const useAllIdeas = () => {
   const [filters, setFilters] = useState<FilterOptions>(INITIAL_FILTERS);
-  const [ideas] = useState<IdeaCard[]>(HARDCODED_IDEAS);
+  const [ideas, setIdeas] = useState<IdeaCard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Helper function to map difficulty levels
+  const mapDifficulty = (difficulty: string): "Easy" | "Moderate" | "Challenging" => {
+    const lowerDifficulty = difficulty.toLowerCase();
+    if (lowerDifficulty === 'easy') return 'Easy';
+    if (lowerDifficulty === 'medium' || lowerDifficulty === 'moderate') return 'Moderate';
+    if (lowerDifficulty === 'hard' || lowerDifficulty === 'challenging') return 'Challenging';
+    return 'Moderate'; // Default fallback
+  };
+
+  // Helper function to map categories to ideaType
+  const mapIdeaType = (category: string): "New Tech" | "Women Focused" | "Unicorn Ideas" | "Manufacturing" | "Service Ideas" | "Middle Class" | "Rural Focused" => {
+    const lowerCategory = category.toLowerCase();
+    if (lowerCategory.includes('technology') || lowerCategory.includes('tech')) return 'New Tech';
+    if (lowerCategory.includes('women') || lowerCategory.includes('for women')) return 'Women Focused';
+    if (lowerCategory.includes('manufacturing') || lowerCategory.includes('production')) return 'Manufacturing';
+    if (lowerCategory.includes('service') || lowerCategory.includes('services')) return 'Service Ideas';
+    if (lowerCategory.includes('rural') || lowerCategory.includes('agriculture')) return 'Rural Focused';
+    return 'Middle Class'; // Default fallback
+  };
+
+  // Fetch ideas from API
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      try {
+        setLoading(true);
+        const fetchedIdeas = await ideaService.getAllIdeas();
+        
+        // Transform backend data to frontend format
+        const transformedIdeas: IdeaCard[] = fetchedIdeas.map((idea) => ({
+          id: String(idea.id),
+          title: idea.title,
+          description: idea.description,
+          category: idea.category,
+          subcategory: idea.sector,
+          investment: {
+            min: idea.investmentNeeded ? Math.floor(idea.investmentNeeded * 0.8) : 0,
+            max: idea.investmentNeeded || 0,
+            currency: '₹'
+          },
+          difficulty: mapDifficulty(idea.difficultyLevel || 'Medium'),
+          marketScore: Math.floor(Math.random() * 3) + 8, // 8-10
+          painPointScore: Math.floor(Math.random() * 3) + 8, // 8-10
+          timingScore: Math.floor(Math.random() * 3) + 8, // 8-10
+          tags: idea.targetAudience || [],
+          type: idea.category,
+          ideaType: mapIdeaType(idea.category),
+          featured: false,
+          favorite: false,
+          image: idea.imageUrl || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400'
+        }));
+        
+        setIdeas(transformedIdeas);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching ideas:', err);
+        setError('Failed to load ideas');
+        setIdeas([]); // Fallback to empty array
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIdeas();
+  }, []);
 
   // Filter logic
   const filteredIdeas = useMemo(() => {
@@ -139,7 +207,6 @@ export const useAllIdeas = () => {
   };
 
   return {
-    ideas,
     filteredIdeas,
     filters,
     filterData: FILTER_DATA,
@@ -149,6 +216,49 @@ export const useAllIdeas = () => {
     toggleFavorite,
     handleCardClick,
     totalIdeas: ideas.length,
-    filteredCount: filteredIdeas.length
+    filteredCount: filteredIdeas.length,
+    loading,
+    error,
+    refreshIdeas: () => {
+      // Force refresh by calling fetch again
+      const fetchIdeas = async () => {
+        try {
+          setLoading(true);
+          const fetchedIdeas = await ideaService.getAllIdeas();
+          
+          const transformedIdeas: IdeaCard[] = fetchedIdeas.map((idea) => ({
+            id: String(idea.id),
+            title: idea.title,
+            description: idea.description,
+            category: idea.category,
+            subcategory: idea.sector,
+            investment: {
+              min: idea.investmentNeeded ? Math.floor(idea.investmentNeeded * 0.8) : 0,
+              max: idea.investmentNeeded || 0,
+              currency: '₹'
+            },
+            difficulty: mapDifficulty(idea.difficultyLevel || 'Medium'),
+            marketScore: Math.floor(Math.random() * 3) + 8,
+            painPointScore: Math.floor(Math.random() * 3) + 8,
+            timingScore: Math.floor(Math.random() * 3) + 8,
+            tags: idea.targetAudience || [],
+            type: idea.category,
+            ideaType: mapIdeaType(idea.category),
+            featured: false,
+            favorite: false,
+            image: idea.imageUrl || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400'
+          }));
+          
+          setIdeas(transformedIdeas);
+          setError(null);
+        } catch (err) {
+          console.error('Error fetching ideas:', err);
+          setError('Failed to load ideas');
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchIdeas();
+    }
   };
 }; 

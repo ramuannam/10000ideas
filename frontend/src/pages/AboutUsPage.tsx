@@ -34,7 +34,7 @@ const AboutUsPage: React.FC = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-white py-16 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 py-12 overflow-hidden">
         {/* Decorative Elements */}
         <div className="absolute top-10 right-20 w-32 h-32 bg-blue-600 rounded-full opacity-20"></div>
         <div className="absolute top-32 right-10 w-24 h-24 bg-blue-400 rounded-full opacity-30"></div>
@@ -52,51 +52,52 @@ const AboutUsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="flex items-center justify-between">
             {/* Left Content */}
-            <div className="flex-1 max-w-2xl">
-              <div className="flex items-center mb-8">
+            <div className="flex-1 max-w-3xl">
+              <div className="flex items-center space-x-10 mb-6">
                 {/* Profile Image */}
                 <div className="relative">
-                  <div className="w-32 h-32 bg-blue-600 rounded-full overflow-hidden shadow-lg">
-                    <img 
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3"
-                      alt="Team Member"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute -right-4 top-8 bg-yellow-400 rounded-lg px-3 py-1 text-sm font-semibold text-gray-900">
-                    Ten Thousand Ideas
+                  <img 
+                    src="/founder.jpg"
+                    alt="Founder"
+                    className="w-56 h-72 object-cover object-top"
+                  />
+                  <div className="absolute -right-12 -bottom-4 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg px-4 py-2 text-sm font-bold text-gray-900 shadow-lg">
+                    Founder & Visionary
                   </div>
                 </div>
                 
                 {/* Logo */}
-                <div className="ml-8">
-                  <div className="flex items-center">
-                    <FaLightbulb className="text-yellow-400 text-2xl mr-3" />
+                <div className="flex-1">
+                  <div className="flex items-center mb-6">
+                    <FaLightbulb className="text-yellow-500 text-4xl mr-4" />
                     <div>
-                      <h1 className="text-4xl font-bold text-blue-600">10000</h1>
-                      <h2 className="text-2xl font-bold text-blue-600 -mt-2">IDEAS</h2>
+                      <h1 className="text-6xl font-bold text-blue-700">10000</h1>
+                      <h2 className="text-4xl font-bold text-blue-700 -mt-3">IDEAS</h2>
                     </div>
                   </div>
+                  <p className="text-gray-700 text-lg font-medium max-w-lg leading-relaxed">
+                    Empowering entrepreneurs with innovative business ideas since 2020. Your gateway to endless possibilities and creative solutions.
+                  </p>
                 </div>
               </div>
 
               {/* Social Media */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-blue-600 mb-4">Find us On</h3>
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-blue-600 mb-3">Find us On</h3>
                 <div className="flex space-x-4">
-                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors cursor-pointer shadow-md">
                     <FaFacebookF className="text-white text-sm" />
                   </div>
-                  <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors cursor-pointer shadow-md">
                     <FaInstagram className="text-white text-sm" />
                   </div>
-                  <div className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-blue-400 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors cursor-pointer shadow-md">
                     <FaPinterest className="text-white text-sm" />
                   </div>
-                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer shadow-md">
                     <FaTwitter className="text-white text-sm" />
                   </div>
-                  <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors cursor-pointer shadow-md">
                     <FaYoutube className="text-white text-sm" />
                   </div>
                 </div>

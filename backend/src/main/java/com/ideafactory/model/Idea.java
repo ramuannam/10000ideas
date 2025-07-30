@@ -3,6 +3,7 @@ package com.ideafactory.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -64,10 +65,17 @@ public class Idea {
     
     private String imageUrl;
     
-    private boolean isActive = true;
+    @Column(name = "active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @JsonProperty("isActive")
+    private boolean active = true;
+
+    @Column(name = "upload_batch_id")
+    private String uploadBatchId;
     
     // Constructors
-    public Idea() {}
+    public Idea() {
+        this.active = true; // Ensure active is always true by default
+    }
     
     public Idea(String title, String description, String category, String sector, BigDecimal investmentNeeded) {
         this.title = title;
@@ -75,6 +83,7 @@ public class Idea {
         this.category = category;
         this.sector = sector;
         this.investmentNeeded = investmentNeeded;
+        this.active = true; // Ensure active is always true by default
     }
     
     // Getters and Setters
@@ -239,10 +248,23 @@ public class Idea {
     }
     
     public boolean isActive() {
-        return isActive;
+        return active;
+    }
+    
+    // Alternative getter for JSON serialization
+    public boolean getActive() {
+        return active;
     }
     
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
+    }
+
+    public String getUploadBatchId() {
+        return uploadBatchId;
+    }
+
+    public void setUploadBatchId(String uploadBatchId) {
+        this.uploadBatchId = uploadBatchId;
     }
 } 

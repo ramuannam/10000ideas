@@ -37,4 +37,20 @@ export interface FilterData {
   sectors: string[];
   difficultyLevels: string[];
   locations: string[];
+}
+
+// Admin-specific interfaces for hierarchical filtering
+export interface AdminFilterOptions {
+  mainCategory?: string;
+  subCategory?: string;
+  difficultyLevel?: string;
+  location?: string;
+  maxInvestment?: number;
+  targetAudience?: string;
+  specialAdvantage?: string;
+  search?: string;
+}
+
+export interface CategoryHierarchy {
+  [mainCategory: string]: string[];
 } 
