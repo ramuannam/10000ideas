@@ -3,11 +3,15 @@ package com.ideafactory.controller;
 import com.ideafactory.model.Idea;
 import com.ideafactory.service.IdeaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +25,15 @@ public class IdeaController {
     @GetMapping("/ideas")
     public ResponseEntity<List<Idea>> getAllIdeas() {
         List<Idea> ideas = ideaService.getAllIdeas();
+        return ResponseEntity.ok(ideas);
+    }
+    
+    @GetMapping("/ideas/paginated")
+    public ResponseEntity<Page<Idea>> getAllIdeasPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Idea> ideas = ideaService.getAllIdeasPaginated(pageable);
         return ResponseEntity.ok(ideas);
     }
     
@@ -91,6 +104,19 @@ public class IdeaController {
             @RequestParam(required = false) BigDecimal maxInvestment) {
         List<Idea> ideas = ideaService.getIdeasWithFilters(category, sector, difficultyLevel, location, maxInvestment);
         return ResponseEntity.ok(ideas);
+    }
+    
+    @GetMapping("/ideas/performance")
+    public ResponseEntity<Object> getPerformanceInfo() {
+        long startTime = System.currentTimeMillis();
+        List<Idea> ideas = ideaService.getAllIdeas();
+        long endTime = System.currentTimeMillis();
+        
+        return ResponseEntity.ok(Map.of(
+            "totalIdeas", ideas.size(),
+            "queryTimeMs", endTime - startTime,
+            "timestamp", System.currentTimeMillis()
+        ));
     }
     
     @GetMapping("/categories")

@@ -147,31 +147,7 @@ const AdminLoginPage: React.FC = () => {
             </div>
           </form>
 
-          {/* Default Credentials Info */}
-          <div className="mt-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg">
-            <h4 className="text-blue-200 font-semibold mb-2">Default Admin Credentials:</h4>
-            <div className="text-blue-100 text-sm space-y-1">
-              <p><span className="font-medium">Username:</span> admin</p>
-              <p><span className="font-medium">Password:</span> admin123</p>
-            </div>
-          </div>
 
-          {/* Quick Login Button */}
-          <div className="mt-4">
-            <button
-              type="button"
-              onClick={() => {
-                setFormData({
-                  usernameOrEmail: 'admin',
-                  password: 'admin123'
-                });
-              }}
-              className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-blue-200 bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 rounded-lg transition-colors duration-200"
-            >
-              <FaCog className="w-4 h-4 mr-2" />
-              Quick Login with Default Credentials
-            </button>
-          </div>
         </div>
 
         {/* Footer */}

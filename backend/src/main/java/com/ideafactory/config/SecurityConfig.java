@@ -2,6 +2,7 @@ package com.ideafactory.config;
 
 import com.ideafactory.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +28,8 @@ import org.springframework.beans.factory.annotation.Value;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+@EnableCaching
 public class SecurityConfig {
-    
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
     
     @Autowired
     @Lazy
@@ -69,15 +69,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                // Public endpoints
-                .requestMatchers("/api/ideas/**").permitAll()
-                .requestMatchers("/api/categories/**").permitAll() // Allow public access to categories
-                .requestMatchers("/admin/**").permitAll() // Temporarily allow admin access
-                .requestMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            // Temporarily allow all requests for testing
+            .requestMatchers("/actuator/**").permitAll()
+            .anyRequest().permitAll()
+        )
+            .authenticationProvider(authenticationProvider());
+            // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -86,19 +83,16 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Parse allowed origins from environment variable
-        String[] origins = allowedOrigins.split(",");
-        configuration.setAllowedOriginPatterns(Arrays.asList(origins));
+        // Allow all origins for testing
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         
-        // Parse allowed methods from environment variable
-        String[] methods = allowedMethods.split(",");
-        configuration.setAllowedMethods(Arrays.asList(methods));
+        // Allow all methods
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         
-        // Parse allowed headers from environment variable
-        String[] headers = allowedHeaders.split(",");
-        configuration.setAllowedHeaders(Arrays.asList(headers));
+        // Allow all headers
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(false); // Set to false when using "*"
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

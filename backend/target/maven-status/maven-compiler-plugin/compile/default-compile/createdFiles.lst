@@ -24,6 +24,7 @@ com\ideafactory\model\Admin.class
 com\ideafactory\repository\UploadHistoryRepository.class
 com\ideafactory\repository\CategoryRepository.class
 com\ideafactory\service\UploadHistoryService.class
+com\ideafactory\config\CorsConfig.class
 com\ideafactory\controller\IdeaController.class
 com\ideafactory\config\JwtAuthenticationFilter.class
 com\ideafactory\model\Category.class

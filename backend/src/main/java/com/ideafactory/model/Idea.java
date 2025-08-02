@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -52,7 +54,8 @@ public class Idea {
     private String bankAssistance;
     
     @ElementCollection
-    private List<String> targetAudience; // Women, Rural, Specially Abled, etc.
+    @Fetch(FetchMode.SUBSELECT) // <-- Add this line
+    private List<String> targetAudience; 
     
     @ElementCollection
     private List<String> specialAdvantages;

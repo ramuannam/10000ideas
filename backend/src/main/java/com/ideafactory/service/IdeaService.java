@@ -3,6 +3,7 @@ package com.ideafactory.service;
 import com.ideafactory.model.Idea;
 import com.ideafactory.repository.IdeaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,11 @@ public class IdeaService {
     
     public List<Idea> getAllIdeas() {
         return ideaRepository.findAllActive();
+    }
+    
+    // Add pagination support for better performance
+    public Page<Idea> getAllIdeasPaginated(Pageable pageable) {
+        return ideaRepository.findAllActivePaginated(pageable);
     }
     
     public Optional<Idea> getIdeaById(Long id) {
@@ -62,18 +68,22 @@ public class IdeaService {
         return ideaRepository.findWithFilters(category, sector, difficultyLevel, location, maxInvestment);
     }
     
+    @Cacheable("categories")
     public List<String> getAllCategories() {
         return ideaRepository.findAllCategories();
     }
     
+    @Cacheable("sectors")
     public List<String> getAllSectors() {
         return ideaRepository.findAllSectors();
     }
     
+    @Cacheable("difficultyLevels")
     public List<String> getAllDifficultyLevels() {
         return ideaRepository.findAllDifficultyLevels();
     }
     
+    @Cacheable("locations")
     public List<String> getAllLocations() {
         return ideaRepository.findAllLocations();
     }

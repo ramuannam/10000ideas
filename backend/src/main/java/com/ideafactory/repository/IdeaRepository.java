@@ -45,11 +45,24 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
     @Query("SELECT i FROM Idea i WHERE i.specialAdvantages LIKE %:advantage%")
     List<Idea> findBySpecialAdvantagesContaining(@Param("advantage") String advantage);
     
-    // Find all active ideas
-    @Query("SELECT i FROM Idea i WHERE i.active = true")
-    List<Idea> findAllActive();
+//     // Find all active ideas with eager loading
+//     @Query("SELECT DISTINCT i FROM Idea i LEFT JOIN FETCH i.targetAudience LEFT JOIN FETCH i.specialAdvantages WHERE i.active = true")
+//     List<Idea> findAllActive();
     
-    @Query("SELECT i FROM Idea i WHERE " +
+    // After
+@Query("SELECT i FROM Idea i WHERE i.active = true")
+List<Idea> findAllActive();
+
+//     // Find all active ideas with pagination
+//     @Query("SELECT DISTINCT i FROM Idea i LEFT JOIN FETCH i.targetAudience LEFT JOIN FETCH i.specialAdvantages WHERE i.active = true")
+//     Page<Idea> findAllActivePaginated(Pageable pageable);
+    
+
+    @Query("SELECT i FROM Idea i WHERE i.active = true")
+    Page<Idea> findAllActivePaginated(Pageable pageable);
+    
+
+    @Query("SELECT DISTINCT i FROM Idea i LEFT JOIN FETCH i.targetAudience LEFT JOIN FETCH i.specialAdvantages WHERE " +
            "(:category IS NULL OR i.category = :category) AND " +
            "(:sector IS NULL OR i.sector = :sector) AND " +
            "(:difficultyLevel IS NULL OR i.difficultyLevel = :difficultyLevel) AND " +

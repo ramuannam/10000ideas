@@ -70,6 +70,14 @@ CREATE INDEX IF NOT EXISTS idx_admins_username ON admins(username);
 CREATE INDEX IF NOT EXISTS idx_admins_email ON admins(email);
 CREATE INDEX IF NOT EXISTS idx_admins_is_active ON admins(is_active);
 
+-- Additional indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_ideas_category_sector ON ideas(category, sector);
+CREATE INDEX IF NOT EXISTS idx_ideas_category_active ON ideas(category, is_active);
+CREATE INDEX IF NOT EXISTS idx_ideas_sector_active ON ideas(sector, is_active);
+CREATE INDEX IF NOT EXISTS idx_ideas_difficulty_active ON ideas(difficulty_level, is_active);
+CREATE INDEX IF NOT EXISTS idx_ideas_location_active ON ideas(location, is_active);
+CREATE INDEX IF NOT EXISTS idx_ideas_investment_active ON ideas(investment_needed, is_active);
+
 -- Create function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
