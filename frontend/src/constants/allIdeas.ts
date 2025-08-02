@@ -1,5 +1,5 @@
-import { FilterData, IdeaCard } from '../types/allIdeas.ts';
-import { CATEGORIES_CONFIG } from './categories.ts';
+import { FilterData, IdeaCard } from '../types/allIdeas';
+import { CATEGORIES_CONFIG } from './categories';
 
 // Generate categories from the CATEGORIES_CONFIG
 const generateCategoriesFromConfig = () => {

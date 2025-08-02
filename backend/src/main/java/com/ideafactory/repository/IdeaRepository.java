@@ -80,7 +80,7 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     @Modifying
     @Query("DELETE FROM Idea i WHERE i.uploadBatchId = :batchId")
-    void deleteByUploadBatchId(@Param("batchId") String batchId);
+    int deleteByUploadBatchId(@Param("batchId") String batchId);
 
     @Query("SELECT COUNT(i) FROM Idea i WHERE i.uploadBatchId = :batchId")
     long countByUploadBatchId(@Param("batchId") String batchId);

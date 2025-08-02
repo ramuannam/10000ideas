@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { useCategories } from '../hooks/useCategories.ts';
+import { useCategories } from '../hooks/useCategories';
 
 interface CategoriesDropdownProps {
   activeTab: string;

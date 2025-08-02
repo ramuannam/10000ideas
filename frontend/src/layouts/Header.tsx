@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaLightbulb } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import CategoriesDropdown from '../components/CategoriesDropdown.tsx';
-import { NAVIGATION_ITEMS } from '../constants/categories.ts';
+import CategoriesDropdown from '../components/CategoriesDropdown';
+import { NAVIGATION_ITEMS } from '../constants/categories';
 
 interface HeaderProps {
   activeTab: string;

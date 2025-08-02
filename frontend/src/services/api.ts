@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { Idea, FilterOptions, FilterData } from '../types/index.ts';
-
-const API_BASE_URL = 'http://localhost:8080/api';
+import { Idea, FilterOptions, FilterData } from '../types/index';
+import { API_BASE_URL } from '../config';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -10,7 +9,38 @@ const api = axios.create({
     'Cache-Control': 'no-cache',
     'Pragma': 'no-cache'
   },
+  timeout: 10000, // 10 second timeout
 });
+
+// Add request interceptor for debugging
+api.interceptors.request.use(
+  (config) => {
+    console.log('🌐 API Request:', config.method?.toUpperCase(), config.url);
+    console.log('📍 Base URL:', API_BASE_URL);
+    return config;
+  },
+  (error) => {
+    console.error('❌ API Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor for debugging
+api.interceptors.response.use(
+  (response) => {
+    console.log('✅ API Response:', response.status, response.config.url);
+    return response;
+  },
+  (error) => {
+    console.error('❌ API Response Error:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      url: error.config?.url,
+      message: error.message
+    });
+    return Promise.reject(error);
+  }
+);
 
 export const ideaService = {
   // Get all ideas

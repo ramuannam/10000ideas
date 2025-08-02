@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CATEGORIES_CONFIG } from '../constants/categories.ts';
+import { CATEGORIES_CONFIG } from '../constants/categories';
 
 export const useCategories = () => {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);

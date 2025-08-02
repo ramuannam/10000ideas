@@ -164,4 +164,11 @@ ON CONFLICT DO NOTHING;
 
 -- Grant necessary permissions (if needed)
 -- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ideafactory_user;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ideafactory_user; 
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ideafactory_user;
+
+-- Ensure all ideas are active by default (fix for existing data)
+-- This ensures that any ideas that might have been created with is_active = false are set to true
+UPDATE ideas SET is_active = true WHERE is_active = false OR is_active IS NULL;
+
+-- Also ensure the default value is set for future inserts
+ALTER TABLE ideas ALTER COLUMN is_active SET DEFAULT true; 

@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Idea, FilterOptions, FilterData } from './types/index.ts';
-import { ideaService } from './services/api.ts';
-import IdeaCard from './components/IdeaCard.tsx';
-import IdeaDetail from './components/IdeaDetail.tsx';
-import AuthModal from './components/AuthModal.tsx';
-import Header from './layouts/Header.tsx';
-import Footer from './layouts/Footer.tsx';
-import SubmitIdeaPage from './pages/SubmitIdeaPage.tsx';
-import AllIdeasPage from './pages/AllIdeasPage.tsx';
-import AboutUsPage from './pages/AboutUsPage.tsx';
-import AdminLoginPage from './pages/AdminLoginPage.tsx';
-import AdminDashboard from './pages/AdminDashboard.tsx';
-import UploadHistoryPage from './pages/UploadHistoryPage.tsx';
-import { MAIN_CATEGORIES } from './constants/categories.ts';
-import { HARDCODED_IDEAS } from './constants/allIdeas.ts';
-import IdeaCardGrid from './components/AllIdeas/IdeaCardGrid.tsx';
+import { Idea, FilterOptions, FilterData } from './types/index';
+import { ideaService } from './services/api';
+import IdeaCard from './components/IdeaCard';
+import IdeaDetail from './components/IdeaDetail';
+import AuthModal from './components/AuthModal';
+import Header from './layouts/Header';
+import Footer from './layouts/Footer';
+import SubmitIdeaPage from './pages/SubmitIdeaPage';
+import AllIdeasPage from './pages/AllIdeasPage';
+import AboutUsPage from './pages/AboutUsPage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDashboard from './pages/AdminDashboard';
+import UploadHistoryPage from './pages/UploadHistoryPage';
+import { MAIN_CATEGORIES } from './constants/categories';
+import { HARDCODED_IDEAS } from './constants/allIdeas';
+import IdeaCardGrid from './components/AllIdeas/IdeaCardGrid';
 import { 
   FaLightbulb, 
   FaSpinner, 

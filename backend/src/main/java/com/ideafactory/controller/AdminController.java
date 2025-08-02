@@ -25,7 +25,7 @@ import com.ideafactory.model.UploadHistory;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
+@CrossOrigin(origins = "${spring.web.cors.allowed-origins}")
 // @PreAuthorize("hasRole('ADMIN')") // Temporarily removed for debugging
 public class AdminController {
     
@@ -279,12 +279,17 @@ public class AdminController {
     @DeleteMapping("/upload-history/{batchId}")
     public ResponseEntity<Map<String, Object>> deleteUploadBatch(@PathVariable String batchId) {
         try {
+            System.out.println("Attempting to delete upload batch: " + batchId);
+            
             UploadHistory uploadHistory = uploadHistoryService.getUploadByBatchId(batchId);
             if (uploadHistory == null) {
+                System.out.println("Upload history not found for batch: " + batchId);
                 return ResponseEntity.notFound().build();
             }
             
             long ideasCount = ideaRepository.countByUploadBatchId(batchId);
+            System.out.println("Found " + ideasCount + " ideas to delete for batch: " + batchId);
+            
             boolean deleted = uploadHistoryService.deleteUploadBatch(batchId);
             
             if (deleted) {
@@ -293,11 +298,14 @@ public class AdminController {
                 response.put("message", "Upload batch deleted successfully");
                 response.put("deletedIdeasCount", ideasCount);
                 response.put("filename", uploadHistory.getFilename());
+                System.out.println("Successfully deleted upload batch: " + batchId);
                 return ResponseEntity.ok(response);
             } else {
+                System.out.println("Failed to delete upload batch: " + batchId);
                 return ResponseEntity.internalServerError().build();
             }
         } catch (Exception e) {
+            System.err.println("Error deleting upload batch: " + e.getMessage());
             e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Header from '../layouts/Header.tsx';
-import Footer from '../layouts/Footer.tsx';
-import HeroSection from '../components/SubmitIdea/HeroSection.tsx';
-import StepsNavigation from '../components/SubmitIdea/StepsNavigation.tsx';
-import IdeaForm from '../components/SubmitIdea/IdeaForm.tsx';
-import FAQSection from '../components/SubmitIdea/FAQSection.tsx';
-import AuthModal from '../components/AuthModal.tsx';
-import { useSubmitIdea } from '../hooks/useSubmitIdea.ts';
+import Header from '../layouts/Header';
+import Footer from '../layouts/Footer';
+import HeroSection from '../components/SubmitIdea/HeroSection';
+import StepsNavigation from '../components/SubmitIdea/StepsNavigation';
+import IdeaForm from '../components/SubmitIdea/IdeaForm';
+import FAQSection from '../components/SubmitIdea/FAQSection';
+import AuthModal from '../components/AuthModal';
+import { useSubmitIdea } from '../hooks/useSubmitIdea';
 
 const SubmitIdeaPage: React.FC = () => {
   // Header state

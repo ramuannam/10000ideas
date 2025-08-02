@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { FaSearch, FaFilter } from 'react-icons/fa';
-import { AdvancedFilterProps } from '../../types/allIdeas.ts';
+import { AdvancedFilterProps } from '../../types/allIdeas';
 
 const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
   filters,

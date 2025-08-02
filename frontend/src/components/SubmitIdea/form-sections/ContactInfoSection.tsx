@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormSectionProps } from '../../../types/submitIdea.ts';
+import { FormSectionProps } from '../../../types/submitIdea';
 
 const ContactInfoSection: React.FC<FormSectionProps> = ({ formData, onInputChange }) => {
   return (

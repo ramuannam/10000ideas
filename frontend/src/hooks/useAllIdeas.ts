@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
-import { IdeaCard, FilterOptions } from '../types/allIdeas.ts';
-import { FILTER_DATA, INITIAL_FILTERS } from '../constants/allIdeas.ts';
-import { ideaService } from '../services/api.ts';
+import { IdeaCard, FilterOptions } from '../types/allIdeas';
+import { FILTER_DATA, INITIAL_FILTERS } from '../constants/allIdeas';
+import { ideaService } from '../services/api';
 
 export const useAllIdeas = () => {
   const [filters, setFilters] = useState<FilterOptions>(INITIAL_FILTERS);

@@ -46,15 +46,19 @@ public class UploadHistoryService {
 
             // Count ideas before deletion for verification
             long ideasCount = ideaRepository.countByUploadBatchId(batchId);
+            System.out.println("Found " + ideasCount + " ideas to delete for batch: " + batchId);
             
             // Delete all ideas associated with this batch
-            ideaRepository.deleteByUploadBatchId(batchId);
+            int deletedIdeas = ideaRepository.deleteByUploadBatchId(batchId);
+            System.out.println("Actually deleted " + deletedIdeas + " ideas for batch: " + batchId);
             
             // Delete the upload history record
             uploadHistoryRepository.delete(uploadHistory);
             
             return true;
         } catch (Exception e) {
+            System.err.println("Error deleting upload batch: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Failed to delete upload batch: " + e.getMessage(), e);
         }
     }

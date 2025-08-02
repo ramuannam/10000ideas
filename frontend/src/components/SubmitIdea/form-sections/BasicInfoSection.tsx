@@ -1,6 +1,6 @@
 import React from 'react';
-import { FormSectionProps } from '../../../types/submitIdea.ts';
-import { IDEA_CATEGORIES } from '../../../constants/submitIdea.ts';
+import { FormSectionProps } from '../../../types/submitIdea';
+import { IDEA_CATEGORIES } from '../../../constants/submitIdea';
 
 const BasicInfoSection: React.FC<FormSectionProps> = ({ formData, onInputChange }) => {
   return (

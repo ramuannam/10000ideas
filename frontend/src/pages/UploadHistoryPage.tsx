@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrashAlt, FaFile, FaExclamationTriangle, FaClock, FaDownload, FaInfoCircle } from 'react-icons/fa';
-import authService, { UploadHistory, DeleteUploadResponse, UploadHistoryStats } from '../services/authService.ts';
+import authService, { UploadHistory, DeleteUploadResponse, UploadHistoryStats } from '../services/authService';
 
 interface DeleteModalProps {
   isOpen: boolean;

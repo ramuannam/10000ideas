@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FaEye, FaEyeSlash, FaUser, FaLock, FaEnvelope, FaPhone, FaTimes } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaUser, FaLock, FaEnvelope, FaPhone, FaTimes, FaCog } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 's
   const [mode, setMode] = useState<'signin' | 'signup'>(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -72,6 +74,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 's
   const switchMode = (newMode: 'signin' | 'signup') => {
     setMode(newMode);
     resetForm();
+  };
+
+  const handleAdminLogin = () => {
+    onClose();
+    navigate('/admin/login');
   };
 
   if (!isOpen) return null;
@@ -174,6 +181,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 's
                     </a>
                   </div>
                 </div>
+
+
               </>
             ) : (
               /* DETAILED SIGNUP FORM */
@@ -447,6 +456,20 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 's
                 {mode === 'signin' ? 'Log In' : 'Create Account'}
               </button>
             </div>
+
+            {/* Admin Login Button - Only show on signin mode */}
+            {mode === 'signin' && (
+              <div className="pt-4">
+                <button
+                  type="button"
+                  onClick={handleAdminLogin}
+                  className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200"
+                >
+                  <FaCog className="w-4 h-4 mr-2" />
+                  Admin Login
+                </button>
+              </div>
+            )}
 
             {/* Mode Switch */}
             <div className="text-center pt-4">

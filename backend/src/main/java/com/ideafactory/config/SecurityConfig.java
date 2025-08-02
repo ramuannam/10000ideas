@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +34,15 @@ public class SecurityConfig {
     @Autowired
     @Lazy
     private AdminService adminService;
+    
+    @Value("${spring.web.cors.allowed-origins:http://localhost:3000}")
+    private String allowedOrigins;
+    
+    @Value("${spring.web.cors.allowed-methods:GET,POST,PUT,DELETE,OPTIONS}")
+    private String allowedMethods;
+    
+    @Value("${spring.web.cors.allowed-headers:*}")
+    private String allowedHeaders;
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -75,9 +85,19 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        
+        // Parse allowed origins from environment variable
+        String[] origins = allowedOrigins.split(",");
+        configuration.setAllowedOriginPatterns(Arrays.asList(origins));
+        
+        // Parse allowed methods from environment variable
+        String[] methods = allowedMethods.split(",");
+        configuration.setAllowedMethods(Arrays.asList(methods));
+        
+        // Parse allowed headers from environment variable
+        String[] headers = allowedHeaders.split(",");
+        configuration.setAllowedHeaders(Arrays.asList(headers));
+        
         configuration.setAllowCredentials(true);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { IdeaCard } from '../../types/allIdeas.ts';
+import { IdeaCard } from '../../types/allIdeas';
 
 interface IdeaCardGridProps {
   idea: IdeaCard;

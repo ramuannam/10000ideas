@@ -1,10 +1,10 @@
 import React from 'react';
-import BasicInfoSection from './form-sections/BasicInfoSection.tsx';
-import BusinessDetailsSection from './form-sections/BusinessDetailsSection.tsx';
-import ResourcesSection from './form-sections/ResourcesSection.tsx';
-import ContactInfoSection from './form-sections/ContactInfoSection.tsx';
-import SubmitButton from './form-sections/SubmitButton.tsx';
-import { FormSectionProps } from '../../types/submitIdea.ts';
+import BasicInfoSection from './form-sections/BasicInfoSection';
+import BusinessDetailsSection from './form-sections/BusinessDetailsSection';
+import ResourcesSection from './form-sections/ResourcesSection';
+import ContactInfoSection from './form-sections/ContactInfoSection';
+import SubmitButton from './form-sections/SubmitButton';
+import { FormSectionProps } from '../../types/submitIdea';
 
 interface IdeaFormProps extends FormSectionProps {
   onSubmit: (e: React.FormEvent) => void;

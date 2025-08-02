@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FaUpload, FaFileAlt, FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
-import authService from '../services/authService.ts';
+import authService from '../services/authService';
 
 interface UploadResult {
   success: boolean;

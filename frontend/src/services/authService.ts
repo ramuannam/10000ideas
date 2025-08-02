@@ -1,3 +1,5 @@
+import { ADMIN_API_BASE_URL } from '../config';
+
 interface LoginRequest {
   usernameOrEmail: string;
   password: string;
@@ -46,8 +48,8 @@ export interface UploadHistoryStats {
 }
 
 class AuthService {
-  private baseURL = 'http://localhost:8080/admin/auth';
-  private adminBaseURL = 'http://localhost:8080/admin';
+  private baseURL = `${ADMIN_API_BASE_URL}/auth`;
+  private adminBaseURL = ADMIN_API_BASE_URL;
 
   // Admin login
   async login(credentials: LoginRequest): Promise<LoginResponse> {

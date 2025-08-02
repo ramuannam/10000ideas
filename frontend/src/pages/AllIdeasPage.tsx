@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { FaTh, FaList } from 'react-icons/fa';
-import Header from '../layouts/Header.tsx';
-import Footer from '../layouts/Footer.tsx';
-import AuthModal from '../components/AuthModal.tsx';
-import AdvancedFilter from '../components/AllIdeas/AdvancedFilter.tsx';
-import IdeaCardGrid from '../components/AllIdeas/IdeaCardGrid.tsx';
-import { useAllIdeas } from '../hooks/useAllIdeas.ts';
+import Header from '../layouts/Header';
+import Footer from '../layouts/Footer';
+import AuthModal from '../components/AuthModal';
+import AdvancedFilter from '../components/AllIdeas/AdvancedFilter';
+import IdeaCardGrid from '../components/AllIdeas/IdeaCardGrid';
+import { useAllIdeas } from '../hooks/useAllIdeas';
 
 const AllIdeasPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('All Ideas');

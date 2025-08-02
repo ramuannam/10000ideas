@@ -14,10 +14,10 @@ import {
   FaSearch,
   FaFilter
 } from 'react-icons/fa';
-import authService from '../services/authService.ts';
-import BulkUpload from '../components/BulkUpload.tsx';
-import IdeaEditModal from '../components/IdeaEditModal.tsx';
-import UploadHistoryPage from './UploadHistoryPage.tsx';
+import authService from '../services/authService';
+import BulkUpload from '../components/BulkUpload';
+import IdeaEditModal from '../components/IdeaEditModal';
+import UploadHistoryPage from './UploadHistoryPage';
 
 interface DashboardStats {
   totalIdeas: number;
@@ -827,8 +827,8 @@ const AdminDashboard: React.FC = () => {
 
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: FaChartBar },
-    { id: 'bulk-upload', label: 'Bulk Upload', icon: FaUpload },
     { id: 'ideas', label: 'Manage Ideas', icon: FaLightbulb },
+    { id: 'bulk-upload', label: 'Bulk Upload', icon: FaUpload },
     { id: 'upload-history', label: 'Upload History', icon: FaUsers },
   ];
 

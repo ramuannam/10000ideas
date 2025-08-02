@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaLock, FaEye, FaEyeSlash, FaLightbulb } from 'react-icons/fa';
-import authService from '../services/authService.ts';
+import { FaUser, FaLock, FaEye, FaEyeSlash, FaLightbulb, FaCog } from 'react-icons/fa';
+import authService from '../services/authService';
 
 const AdminLoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -154,6 +154,23 @@ const AdminLoginPage: React.FC = () => {
               <p><span className="font-medium">Username:</span> admin</p>
               <p><span className="font-medium">Password:</span> admin123</p>
             </div>
+          </div>
+
+          {/* Quick Login Button */}
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={() => {
+                setFormData({
+                  usernameOrEmail: 'admin',
+                  password: 'admin123'
+                });
+              }}
+              className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-blue-200 bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 rounded-lg transition-colors duration-200"
+            >
+              <FaCog className="w-4 h-4 mr-2" />
+              Quick Login with Default Credentials
+            </button>
           </div>
         </div>
 

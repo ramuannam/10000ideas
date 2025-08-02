@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { IdeaFormData } from '../types/submitIdea.ts';
-import { INITIAL_FORM_DATA, FORM_STEPS } from '../constants/submitIdea.ts';
+import { IdeaFormData } from '../types/submitIdea';
+import { INITIAL_FORM_DATA, FORM_STEPS } from '../constants/submitIdea';
 
 export const useSubmitIdea = () => {
   const [currentStep, setCurrentStep] = useState(0);

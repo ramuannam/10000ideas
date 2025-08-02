@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import jakarta.annotation.PostConstruct;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -14,10 +15,18 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
     
-    private static final String SECRET = "10000IdeasSecretKeyForJWTTokenGenerationAndValidation2024";
-    private static final int JWT_TOKEN_VALIDITY = 5 * 60 * 60; // 5 hours
+    @Value("${jwt.secret:10000IdeasSecretKeyForJWTTokenGenerationAndValidation2024}")
+    private String secret;
     
-    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    @Value("${jwt.expiration:18000000}")
+    private long jwtExpiration; // Default 5 hours in milliseconds
+    
+    private SecretKey key;
+    
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
     
     // Retrieve username from jwt token
     public String getUsernameFromToken(String token) {
@@ -64,7 +73,7 @@ public class JwtTokenUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }

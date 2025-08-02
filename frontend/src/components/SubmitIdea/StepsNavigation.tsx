@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { StepData } from '../../types/submitIdea.ts';
+import { StepData } from '../../types/submitIdea';
 
 interface StepsNavigationProps {
   currentStep: number;

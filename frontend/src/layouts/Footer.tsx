@@ -1,7 +1,10 @@
 import React from 'react';
-import { FaLightbulb, FaFacebookF, FaInstagram, FaPinterest, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaLightbulb, FaFacebookF, FaInstagram, FaPinterest, FaTwitter, FaYoutube, FaCog } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Footer: React.FC = () => {
+  const navigate = useNavigate();
+  
   return (
     <footer className="bg-white py-12 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4">

@@ -1,2 +1,40 @@
 # Dependencies
 node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# IDE Files
+.idea/
+.vscode/
+*.iml
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build Directories
+target/
+build/
+dist/
+
+# Database
+*.db
+*.sqlite
+
+# Temporary Files
+*.tmp
+*.temp
+
+# Spring Boot
+application-*.properties
+!application.properties
+!application.yml

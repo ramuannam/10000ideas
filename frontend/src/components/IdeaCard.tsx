@@ -1,5 +1,5 @@
 import React from 'react';
-import { Idea } from '../types/index.ts';
+import { Idea } from '../types/index';
 import { FaMoneyBillWave, FaClock, FaMapMarkerAlt, FaStar } from 'react-icons/fa';
 
 interface IdeaCardProps {

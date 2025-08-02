@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FaFacebookF, FaInstagram, FaPinterest, FaTwitter, FaYoutube, FaLightbulb } from 'react-icons/fa';
-import Header from '../layouts/Header.tsx';
-import Footer from '../layouts/Footer.tsx';
-import AuthModal from '../components/AuthModal.tsx';
+import Header from '../layouts/Header';
+import Footer from '../layouts/Footer';
+import AuthModal from '../components/AuthModal';
 
 const AboutUsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('About us');
