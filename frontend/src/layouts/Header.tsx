@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <>
       {/* Top Header Bar */}
-      <div className="bg-blue-900 text-white text-sm py-2">
+      <div className="bg-blue-900 text-white text-sm py-1">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <span className="font-semibold">Over 50% Off on your First Order</span>
@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({
       {/* Navigation Bar */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-12">
             {/* Logo */}
             <div className="flex items-center">
               <div className="flex items-center text-2xl font-bold text-blue-900 cursor-pointer" onClick={() => navigate('/')}>
@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Navigation Links */}
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="hidden md:flex items-center space-x-6">
               <a
                 href="#"
                 onClick={(e) => handleNavClick('Home', e)}

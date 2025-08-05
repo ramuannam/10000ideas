@@ -58,9 +58,9 @@ const IdeaCard: React.FC<IdeaCardProps> = ({ idea, onClick }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-3">
         {/* Category Badge */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-1">
           <span className="text-xs font-medium text-blue-900 bg-blue-50 px-2 py-1 rounded-full">
             {idea.category}
           </span>
@@ -70,28 +70,28 @@ const IdeaCard: React.FC<IdeaCardProps> = ({ idea, onClick }) => {
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2">
+        <h3 className="font-semibold text-base text-gray-900 mb-1 line-clamp-2">
           {idea.title}
         </h3>
 
         {/* Description */}
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+        <p className="text-gray-600 text-xs mb-3 line-clamp-3">
           {idea.description}
         </p>
 
         {/* Investment */}
-        <div className="flex items-center mb-2">
-          <FaMoneyBillWave className="text-green-500 mr-2" />
-          <span className="text-sm font-medium text-gray-900">
+        <div className="flex items-center mb-1">
+          <FaMoneyBillWave className="text-green-500 mr-1" />
+          <span className="text-xs font-medium text-gray-900">
             Investment: {formatCurrency(idea.investmentNeeded)}
           </span>
         </div>
 
         {/* Time to Market */}
         {idea.timeToMarket && (
-          <div className="flex items-center mb-2">
-            <FaClock className="text-blue-500 mr-2" />
-            <span className="text-sm text-gray-600">
+          <div className="flex items-center mb-1">
+            <FaClock className="text-blue-500 mr-1" />
+            <span className="text-xs text-gray-600">
               {idea.timeToMarket}
             </span>
           </div>

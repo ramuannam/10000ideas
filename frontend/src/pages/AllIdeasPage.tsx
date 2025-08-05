@@ -52,9 +52,9 @@ const AllIdeasPage: React.FC = () => {
         handleSignOut={handleSignOut}
       />
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Page Header */}
-        <div className="mb-8">
+        <div className="mb-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Ideas</h1>
@@ -90,19 +90,19 @@ const AllIdeasPage: React.FC = () => {
         </div>
 
         {/* Stats */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Total Ideas</h3>
-            <p className="text-3xl font-bold text-blue-600">{totalIdeas}</p>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <h3 className="text-base font-semibold text-gray-900 mb-1">Total Ideas</h3>
+            <p className="text-2xl font-bold text-blue-600">{totalIdeas}</p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Filtered Results</h3>
-            <p className="text-3xl font-bold text-green-600">{filteredCount}</p>
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <h3 className="text-base font-semibold text-gray-900 mb-1">Filtered Results</h3>
+            <p className="text-2xl font-bold text-green-600">{filteredCount}</p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Categories</h3>
-            <p className="text-3xl font-bold text-purple-600">{filterData.categories.length}</p>
-          </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+              <h3 className="text-base font-semibold text-gray-900 mb-1">Categories</h3>
+              <p className="text-2xl font-bold text-purple-600">{filterData.categories.length}</p>
+            </div>
         </div>
 
         {/* Loading State */}

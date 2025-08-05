@@ -159,12 +159,12 @@ const AdminDashboard: React.FC = () => {
       );
       
       // Ensure all ideas have isActive property set correctly
-      const ideasWithActive = (response.content || []).map(idea => ({
+      const ideasWithActive = (response.content || []).map((idea: any) => ({
         ...idea,
         isActive: idea.isActive !== undefined ? idea.isActive : true // Default to true if not set
       }));
       
-      console.log('Loaded ideas with active status:', ideasWithActive.map(i => ({id: i.id, title: i.title, isActive: i.isActive})));
+      console.log('Loaded ideas with active status:', ideasWithActive.map((i: any) => ({id: i.id, title: i.title, isActive: i.isActive})));
       setIdeas(ideasWithActive);
       setTotalPages(response.totalPages || 0);
     } catch (error) {

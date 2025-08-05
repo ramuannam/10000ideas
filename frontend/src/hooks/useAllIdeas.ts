@@ -1,9 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IdeaCard, FilterOptions } from '../types/allIdeas';
 import { FILTER_DATA, INITIAL_FILTERS } from '../constants/allIdeas';
 import { ideaService } from '../services/api';
 
 export const useAllIdeas = () => {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState<FilterOptions>(INITIAL_FILTERS);
   const [ideas, setIdeas] = useState<IdeaCard[]>([]);
   const [loading, setLoading] = useState(true);
@@ -203,7 +205,7 @@ export const useAllIdeas = () => {
   const handleCardClick = (ideaId: string) => {
     // Navigate to idea detail page
     console.log('Navigate to idea detail:', ideaId);
-    // You could implement navigation here using React Router
+    navigate(`/idea/${ideaId}`);
   };
 
   return {

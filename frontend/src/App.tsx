@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import { Idea, FilterOptions, FilterData } from './types/index';
 import { ideaService } from './services/api';
 import IdeaCard from './components/IdeaCard';
-import IdeaDetail from './components/IdeaDetail';
+import IdeaDetailPage from './components/IdeaDetailPage';
 import AuthModal from './components/AuthModal';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
@@ -674,61 +674,14 @@ const HomePage: React.FC = () => {
   );
 };
 
-const IdeaDetailPage: React.FC = () => {
-  const [idea, setIdea] = useState<Idea | null>(null);
-  const [loading, setLoading] = useState(true);
+const IdeaDetailPageWrapper: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const ideaId = location.pathname.split('/').pop();
-
-  useEffect(() => {
-    if (ideaId) {
-      loadIdea(parseInt(ideaId));
-    }
-  }, [ideaId]);
-
-  const loadIdea = async (id: number) => {
-    setLoading(true);
-    try {
-      const ideaData = await ideaService.getIdeaById(id);
-      setIdea(ideaData);
-    } catch (error) {
-      console.error('Error loading idea:', error);
-      navigate('/');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  
   const handleBack = () => {
     navigate('/');
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-        <FaSpinner className="animate-spin text-4xl text-blue-600" />
-      </div>
-    );
-  }
-
-  if (!idea) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Idea not found</h2>
-          <button
-            onClick={handleBack}
-            className="btn-primary"
-          >
-            Back to Ideas
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return <IdeaDetail idea={idea} onBack={handleBack} />;
+  return <IdeaDetailPage onBack={handleBack} />;
 };
 
 const App: React.FC = () => {
@@ -739,7 +692,7 @@ const App: React.FC = () => {
           <Route path="/submit-idea" element={<SubmitIdeaPage />} />
           <Route path="/all-ideas" element={<AllIdeasPage />} />
           <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="/idea/:id" element={<IdeaDetailPage />} />
+          <Route path="/idea/:id" element={<IdeaDetailPageWrapper />} />
           
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLoginPage />} />
