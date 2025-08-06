@@ -7,26 +7,15 @@ import IdeaForm from '../components/SubmitIdea/IdeaForm';
 import FAQSection from '../components/SubmitIdea/FAQSection';
 import AuthModal from '../components/AuthModal';
 import { useSubmitIdea } from '../hooks/useSubmitIdea';
+import { useAuth } from '../contexts/AuthContext';
 
 const SubmitIdeaPage: React.FC = () => {
   // Header state
   const [activeTab, setActiveTab] = useState('Submit an Idea');
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin');
-  const [isUserSignedIn, setIsUserSignedIn] = useState(false);
+  const { isAuthModalOpen, closeAuthModal, authModalMode, setAuthModalMode } = useAuth();
 
-  // Auth functions
-  const openAuthModal = (mode: 'signin' | 'signup') => {
-    setAuthModalMode(mode);
-    setIsAuthModalOpen(true);
-  };
-
-  const closeAuthModal = () => {
-    setIsAuthModalOpen(false);
-  };
-
-  const handleSignOut = () => {
-    setIsUserSignedIn(false);
+  const handleAuthSuccess = (userData: any) => {
+    console.log('User authenticated:', userData);
   };
 
   // Submit idea form logic
@@ -47,13 +36,7 @@ const SubmitIdeaPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isUserSignedIn={isUserSignedIn}
-        openAuthModal={openAuthModal}
-        handleSignOut={handleSignOut}
-      />
+      <Header />
       
       <HeroSection />
       
@@ -97,6 +80,7 @@ const SubmitIdeaPage: React.FC = () => {
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
         initialMode={authModalMode}
+        onAuthSuccess={handleAuthSuccess}
       />
     </div>
   );

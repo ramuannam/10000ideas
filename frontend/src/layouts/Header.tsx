@@ -1,139 +1,149 @@
 import React from 'react';
-import { FaLightbulb } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import CategoriesDropdown from '../components/CategoriesDropdown';
-import { NAVIGATION_ITEMS } from '../constants/categories';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { 
+  FaUser, 
+  FaLightbulb, 
+  FaEnvelope, 
+  FaFacebookF, 
+  FaTwitter, 
+  FaInstagram 
+} from 'react-icons/fa';
 
-interface HeaderProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-  isUserSignedIn: boolean;
-  openAuthModal: (mode: 'signin' | 'signup') => void;
-  handleSignOut: () => void;
-}
+const Header: React.FC = () => {
+  const location = useLocation();
+  const { isUserSignedIn, openAuthModal, logout } = useAuth();
 
-const Header: React.FC<HeaderProps> = ({
-  activeTab,
-  setActiveTab,
-  isUserSignedIn,
-  openAuthModal,
-  handleSignOut
-}) => {
-  const navigate = useNavigate();
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
 
-  const handleNavClick = (tab: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    setActiveTab(tab);
-    
-    if (tab === 'Submit an Idea') {
-      navigate('/submit-idea');
-    } else if (tab === 'All Ideas') {
-      navigate('/all-ideas');
-    } else if (tab === 'About us') {
-      navigate('/about-us');
-    } else if (tab === 'Home') {
-      navigate('/');
-    }
-    // Add other navigation logic as needed
+  const handleSignOut = () => {
+    logout();
   };
 
   return (
-    <>
-      {/* Top Header Bar */}
-      <div className="bg-blue-900 text-white text-sm py-1">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-            <span className="font-semibold">Over 50% Off on your First Order</span>
-            <button className="bg-yellow-400 text-blue-900 px-3 py-1 rounded text-xs font-semibold hover:bg-yellow-500 transition-colors">
-              Buy Report Now
-            </button>
-          </div>
-          <div className="flex items-center space-x-4">
-            <select className="bg-blue-800 text-white border border-blue-700 rounded px-2 py-1 text-sm cursor-pointer">
-              <option value="en">🇺🇸 English</option>
-              <option value="es">🇪🇸 Spanish</option>
-              <option value="fr">🇫🇷 French</option>
-              <option value="de">🇩🇪 German</option>
-              <option value="zh">🇨🇳 Chinese</option>
-              <option value="hi">🇮🇳 Hindi</option>
-              <option value="ar">🇸🇦 Arabic</option>
-              <option value="pt">🇧🇷 Portuguese</option>
-              <option value="ru">🇷🇺 Russian</option>
-              <option value="ja">🇯🇵 Japanese</option>
-            </select>
+    <header className="bg-white shadow-sm">
+      {/* Top Bar */}
+      <div className="bg-blue-600 text-white py-1">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center text-xs">
+            <div className="flex items-center space-x-4">
+              <span className="flex items-center">
+                <FaEnvelope className="mr-1" />
+                info@10000ideas.com
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <a href="#" className="hover:text-blue-200 transition-colors">
+                <FaFacebookF />
+              </a>
+              <a href="#" className="hover:text-blue-200 transition-colors">
+                <FaTwitter />
+              </a>
+              <a href="#" className="hover:text-blue-200 transition-colors">
+                <FaInstagram />
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Navigation Bar */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-12">
+      {/* Main Navigation */}
+      <nav className="h-12">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center h-full">
             {/* Logo */}
-            <div className="flex items-center">
-              <div className="flex items-center text-2xl font-bold text-blue-900 cursor-pointer" onClick={() => navigate('/')}>
-                <FaLightbulb className="text-yellow-500 mr-2" />
-                10000IDEAS
+            <Link to="/" className="flex items-center space-x-2">
+              <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                <FaLightbulb className="text-white text-sm" />
               </div>
-            </div>
+              <span className="text-xl font-bold text-gray-800">10000Ideas</span>
+            </Link>
 
             {/* Navigation Links */}
-            <nav className="hidden md:flex items-center space-x-6">
-              <a
-                href="#"
-                onClick={(e) => handleNavClick('Home', e)}
-                className={`transition-colors duration-200 pb-1 ${
-                  activeTab === 'Home'
-                    ? 'text-blue-900 border-b-2 border-yellow-400'
-                    : 'text-gray-600 hover:text-blue-900'
+            <div className="hidden md:flex items-center space-x-6">
+              <Link 
+                to="/" 
+                className={`text-sm font-medium transition-colors ${
+                  isActive('/') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
                 }`}
               >
                 Home
-              </a>
-              
-              <CategoriesDropdown activeTab={activeTab} setActiveTab={setActiveTab} />
-              
-              {NAVIGATION_ITEMS.map((tab) => (
-                <a
-                  key={tab}
-                  href="#"
-                  onClick={(e) => handleNavClick(tab, e)}
-                  className={`transition-colors duration-200 pb-1 ${
-                    activeTab === tab
-                      ? 'text-blue-900 border-b-2 border-yellow-400'
-                      : 'text-gray-600 hover:text-blue-900'
-                  }`}
-                >
-                  {tab}
-                </a>
-              ))}
-            </nav>
+              </Link>
+              <Link 
+                to="/about" 
+                className={`text-sm font-medium transition-colors ${
+                  isActive('/about') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                About Us
+              </Link>
+              <Link 
+                to="/all-ideas" 
+                className={`text-sm font-medium transition-colors ${
+                  isActive('/all-ideas') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                All Ideas
+              </Link>
+              <Link 
+                to="/government-grants" 
+                className={`text-sm font-medium transition-colors ${
+                  isActive('/government-grants') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                Government Grants
+              </Link>
+              <Link 
+                to="/submit-idea" 
+                className={`text-sm font-medium transition-colors ${
+                  isActive('/submit-idea') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                Submit Idea
+              </Link>
+            </div>
 
-            {/* Auth Section */}
+            {/* Auth Buttons */}
             <div className="flex items-center space-x-4">
-              {!isUserSignedIn ? (
-                <button
-                  onClick={() => openAuthModal('signin')}
-                  className="bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors"
-                >
-                  Sign In / Sign Up
-                </button>
-              ) : (
+              {isUserSignedIn ? (
                 <div className="flex items-center space-x-3">
-                  <span className="text-gray-700 text-sm">Welcome back!</span>
+                  <Link 
+                    to="/dashboard" 
+                    className="flex items-center space-x-1 text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                  >
+                    <FaUser className="text-sm" />
+                    <span>Dashboard</span>
+                  </Link>
                   <button
                     onClick={handleSignOut}
-                    className="text-gray-600 hover:text-blue-900 text-sm font-medium transition-colors"
+                    className="text-sm text-gray-600 hover:text-red-600 transition-colors"
                   >
                     Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => openAuthModal('signin')}
+                    className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => openAuthModal('signup')}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    Create Account
                   </button>
                 </div>
               )}
             </div>
           </div>
         </div>
-      </header>
-    </>
+      </nav>
+    </header>
   );
 };
 

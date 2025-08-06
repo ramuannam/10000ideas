@@ -1158,10 +1158,10 @@ const IdeaDetailPage: React.FC<IdeaDetailPageProps> = ({ onBack }) => {
       </div>
 
       {/* Additional Sections Below Main Tabs */}
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 space-y-4">
         
         {/* Funding Section */}
-        <div className="mt-12">
+        <div className="mt-2">
           <div className="bg-white rounded-xl shadow-lg border border-gray-100 mb-8">
             <div 
               className="p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
@@ -1333,6 +1333,18 @@ const IdeaDetailPage: React.FC<IdeaDetailPageProps> = ({ onBack }) => {
                           </div>
                         </div>
                       </div>
+                      {/* View More Link */}
+                      <div className="mt-4 pt-3 border-t border-purple-200">
+                        <a
+                          href="/government-grants"
+                          className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm transition-colors"
+                        >
+                          View More Government Grants & Schemes
+                          <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </a>
+                      </div>
                     </div>
                   </div>
 
@@ -1434,7 +1446,7 @@ const IdeaDetailPage: React.FC<IdeaDetailPageProps> = ({ onBack }) => {
         </div>
         
         {/* Investments Section */}
-        <div className="mt-12">
+        <div className="mt-2">
           <div className="bg-white rounded-xl shadow-lg border border-gray-100 mb-8">
             <div 
               className="p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
@@ -1826,7 +1838,7 @@ const IdeaDetailPage: React.FC<IdeaDetailPageProps> = ({ onBack }) => {
 
 
         {/* Skills Required Section */}
-        <div className="mt-12">
+        <div className="mt-2">
           <div className="bg-white rounded-xl shadow-lg border border-gray-100 mb-8">
             <div 
               className="p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"

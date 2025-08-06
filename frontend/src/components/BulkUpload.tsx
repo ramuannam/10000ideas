@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FaUpload, FaFileAlt, FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
-import authService from '../services/authService';
+import adminService from '../services/adminService';
 
 interface UploadResult {
   success: boolean;
@@ -73,7 +73,7 @@ const BulkUpload: React.FC = () => {
     setUploadResult(null);
 
     try {
-      const result = await authService.uploadIdeas(selectedFile);
+      const result = await adminService.uploadIdeas(selectedFile);
       setUploadResult(result);
       
       // Clear the file input

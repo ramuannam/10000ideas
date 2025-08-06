@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEye, FaEyeSlash, FaLightbulb, FaCog } from 'react-icons/fa';
+import adminService from '../services/adminService';
 import authService from '../services/authService';
 
 const AdminLoginPage: React.FC = () => {
@@ -35,7 +36,7 @@ const AdminLoginPage: React.FC = () => {
     setError('');
 
     try {
-      await authService.login(formData);
+      await adminService.login(formData);
       navigate('/admin/dashboard');
     } catch (err: any) {
       setError(err.message || 'Login failed');

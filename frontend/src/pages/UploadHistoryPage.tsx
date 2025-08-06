@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrashAlt, FaFile, FaExclamationTriangle, FaClock, FaDownload, FaInfoCircle } from 'react-icons/fa';
-import authService, { UploadHistory, DeleteUploadResponse, UploadHistoryStats } from '../services/authService';
+import adminService, { UploadHistory, DeleteUploadResponse, UploadHistoryStats } from '../services/adminService';
 
 interface DeleteModalProps {
   isOpen: boolean;
@@ -85,8 +85,8 @@ const UploadHistoryPage: React.FC = () => {
     try {
       setLoading(true);
       const [historyData, statsData] = await Promise.all([
-        authService.getUploadHistory(),
-        authService.getUploadHistoryStats()
+        adminService.getUploadHistory(),
+        adminService.getUploadHistoryStats()
       ]);
       setUploadHistory(historyData);
       setStats(statsData);
@@ -111,14 +111,14 @@ const UploadHistoryPage: React.FC = () => {
 
     try {
       setDeleting(deleteModal.uploadHistory.batchId);
-      const response: DeleteUploadResponse = await authService.deleteUploadBatch(deleteModal.uploadHistory.batchId);
+      const response: DeleteUploadResponse = await adminService.deleteUploadBatch(deleteModal.uploadHistory.batchId);
       
       if (response.success) {
         // Remove from local state
         setUploadHistory(prev => prev.filter(u => u.batchId !== deleteModal.uploadHistory!.batchId));
         
         // Refresh stats
-        const newStats = await authService.getUploadHistoryStats();
+        const newStats = await adminService.getUploadHistoryStats();
         setStats(newStats);
         
         // Show success message

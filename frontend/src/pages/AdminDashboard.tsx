@@ -14,7 +14,7 @@ import {
   FaSearch,
   FaFilter
 } from 'react-icons/fa';
-import authService from '../services/authService';
+import adminService from '../services/adminService';
 import BulkUpload from '../components/BulkUpload';
 import IdeaEditModal from '../components/IdeaEditModal';
 import UploadHistoryPage from './UploadHistoryPage';
@@ -79,10 +79,10 @@ const AdminDashboard: React.FC = () => {
   const [editingIdea, setEditingIdea] = useState<Idea | null>(null);
   const navigate = useNavigate();
 
-  const user = authService.getUserInfo();
+  const user = adminService.getUserInfo();
 
   useEffect(() => {
-    if (!authService.isAuthenticated()) {
+    if (!adminService.isAuthenticated()) {
       navigate('/admin/login');
       return;
     }
@@ -105,7 +105,7 @@ const AdminDashboard: React.FC = () => {
   const loadFilterOptions = async () => {
     try {
       console.log('Loading filter options...');
-      const options = await authService.getFilterOptions();
+      const options = await adminService.getFilterOptions();
       console.log('Filter options loaded:', options);
       setFilterOptions(options);
     } catch (error) {
@@ -127,8 +127,8 @@ const AdminDashboard: React.FC = () => {
       setLoading(true);
       setError(null);
       const [statsData, ideasData] = await Promise.all([
-        authService.getDashboardStats(),
-        authService.getIdeasPaginated(0, 10, 'id', 'desc')
+        adminService.getDashboardStats(),
+        adminService.getIdeasPaginated(0, 10, 'id', 'desc')
       ]);
       setStats(statsData);
       setIdeas(ideasData.content || []);
@@ -143,7 +143,7 @@ const AdminDashboard: React.FC = () => {
   const loadIdeas = async () => {
     try {
       setLoading(true);
-      const response = await authService.getIdeasPaginated(
+      const response = await adminService.getIdeasPaginated(
         currentPage, 
         20, 
         'id', 
@@ -175,7 +175,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleLogout = () => {
-    authService.logout();
+    adminService.logout();
     navigate('/admin/login');
   };
 
@@ -194,7 +194,7 @@ const AdminDashboard: React.FC = () => {
       setIdeas(updatedIdeas);
       
       // Make API call in background
-      await authService.toggleIdeaStatus(ideaId);
+      await adminService.toggleIdeaStatus(ideaId);
       
       // Show simple success message
       console.log(`✅ Idea ${ideaId} toggled to ${!ideaToUpdate.isActive ? 'ACTIVE' : 'INACTIVE'}`);
@@ -220,7 +220,7 @@ const AdminDashboard: React.FC = () => {
     
     if (window.confirm(confirmMessage)) {
       try {
-        await authService.deleteIdea(ideaId);
+        await adminService.deleteIdea(ideaId);
         loadIdeas(); // Reload ideas
         alert(`✅ Idea "${ideaTitle}" has been permanently deleted.`);
       } catch (error) {
@@ -271,7 +271,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleSaveIdea = async (updatedIdea: Idea) => {
     try {
-      await authService.updateIdea(updatedIdea.id, updatedIdea);
+      await adminService.updateIdea(updatedIdea.id, updatedIdea);
       loadIdeas();
       setEditingIdea(null);
     } catch (error) {

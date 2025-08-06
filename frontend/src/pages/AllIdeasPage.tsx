@@ -6,13 +6,12 @@ import AuthModal from '../components/AuthModal';
 import AdvancedFilter from '../components/AllIdeas/AdvancedFilter';
 import IdeaCardGrid from '../components/AllIdeas/IdeaCardGrid';
 import { useAllIdeas } from '../hooks/useAllIdeas';
+import { useAuth } from '../contexts/AuthContext';
 
 const AllIdeasPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('All Ideas');
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin');
-  const [isUserSignedIn, setIsUserSignedIn] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const { isAuthModalOpen, closeAuthModal, authModalMode, setAuthModalMode } = useAuth();
 
   const {
     filteredIdeas,
@@ -29,28 +28,13 @@ const AllIdeasPage: React.FC = () => {
     error
   } = useAllIdeas();
 
-  const openAuthModal = (mode: 'signin' | 'signup') => {
-    setAuthModalMode(mode);
-    setIsAuthModalOpen(true);
-  };
-
-  const closeAuthModal = () => {
-    setIsAuthModalOpen(false);
-  };
-
-  const handleSignOut = () => {
-    setIsUserSignedIn(false);
+  const handleAuthSuccess = (userData: any) => {
+    console.log('User authenticated:', userData);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isUserSignedIn={isUserSignedIn}
-        openAuthModal={openAuthModal}
-        handleSignOut={handleSignOut}
-      />
+      <Header />
 
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Page Header */}
@@ -219,6 +203,7 @@ const AllIdeasPage: React.FC = () => {
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
         initialMode={authModalMode}
+        onAuthSuccess={handleAuthSuccess}
       />
     </div>
   );
