@@ -107,6 +107,8 @@ public class SecurityConfig {
                     "/api/users/forgot-password",
                     "/api/users/reset-password",
                     "/api/users/verify-email",
+                    "/api/auth/login",
+                    "/api/auth/validate",
                     "/api/ideas/**",
                     "/api/categories/**",
                     "/actuator/**"

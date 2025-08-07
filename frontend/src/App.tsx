@@ -15,8 +15,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import UploadHistoryPage from './pages/UploadHistoryPage';
 import GovernmentGrantsPage from './pages/GovernmentGrantsPage';
 import UserDashboard from './pages/UserDashboard';
+
 import { MAIN_CATEGORIES } from './constants/categories';
-import { HARDCODED_IDEAS } from './constants/allIdeas';
 import IdeaCardGrid from './components/AllIdeas/IdeaCardGrid';
 import { authService } from './services/authService';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -35,7 +35,12 @@ import {
   FaLaptopCode,
   FaChevronUp,
   FaChevronDown,
-  FaUser
+  FaUser,
+  FaNewspaper,
+  FaBook,
+  FaSearch,
+  FaMapMarkerAlt,
+  FaFilter
 } from 'react-icons/fa';
 import {
   IoWomanOutline,
@@ -60,6 +65,11 @@ const HomePage: React.FC = () => {
   const [filters, setFilters] = useState<FilterOptions>({});
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Home');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
   const { isUserSignedIn, openAuthModal, isAuthModalOpen, closeAuthModal, authModalMode, setAuthModalMode } = useAuth();
   const navigate = useNavigate();
 
@@ -103,14 +113,9 @@ const HomePage: React.FC = () => {
   };
 
   const loadIdeas = async () => {
-    setLoading(true);
     try {
-      let ideasData: Idea[];
-      if (Object.keys(filters).length > 0) {
-        ideasData = await ideaService.getIdeasWithFilters(filters);
-      } else {
-        ideasData = await ideaService.getAllIdeas();
-      }
+    setLoading(true);
+      const ideasData = await ideaService.getIdeasWithFilters(filters);
       setIdeas(ideasData);
     } catch (error) {
       console.error('Error loading ideas:', error);
@@ -127,32 +132,16 @@ const HomePage: React.FC = () => {
     setFilters(newFilters);
   };
 
-  // Featured ideas handlers
   const handleFeaturedIdeaClick = (ideaId: string) => {
-    // Navigate to All Ideas page and potentially filter by the idea
-    setActiveTab('All Ideas');
-    navigate('/all-ideas');
+    navigate(`/idea/${ideaId}`);
   };
 
   const handleToggleFavorite = (ideaId: string) => {
-    // Toggle favorite functionality - for now just log
+    // Handle favorite toggle logic
     console.log('Toggle favorite for idea:', ideaId);
   };
 
-  const filteredIdeas = ideas;
-
-  // Icon mapping for categories
-  const iconMap = {
-    IoWomanOutline,
-    FaRocket, 
-    FaLaptopCode,
-    MdEngineering,
-    GiFarmTractor,
-    IoRestaurantOutline,
-    GiDress
-  };
-
-  // Featured ideas data - simple ideas that match the original Idea interface
+  // Sample featured ideas for demonstration - matching Idea interface
   const featuredIdeas: Idea[] = [
     {
       id: 1,
@@ -210,20 +199,20 @@ const HomePage: React.FC = () => {
       isActive: true,
       targetAudience: ['Manufacturing']
     },
-    {
-      id: 5,
-      title: 'Food Truck Network',
-      description: 'Network of gourmet food trucks serving regional cuisines at corporate areas and events.',
-      category: 'Food & Beverage',
-      sector: 'Food',
-      investmentNeeded: 800000,
-      expertiseNeeded: 'Easy',
-      specialAdvantages: ['Local chefs can showcase regional specialties'],
-      difficultyLevel: 'Easy',
-      imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=250&fit=crop',
-      isActive: true,
-      targetAudience: ['Service Ideas']
-    },
+         {
+       id: 5,
+       title: 'Food Truck Network',
+       description: 'Network of gourmet food trucks serving regional cuisines at corporate areas and events.',
+       category: 'Food & Beverage',
+       sector: 'Food',
+       investmentNeeded: 800000,
+       expertiseNeeded: 'Easy',
+       specialAdvantages: ['Local chefs can showcase regional specialties'],
+       difficultyLevel: 'Easy',
+       imageUrl: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=250&fit=crop',
+       isActive: true,
+       targetAudience: ['Service Ideas']
+     },
     {
       id: 6,
       title: 'Mobile Repair & Electronics Service',
@@ -240,60 +229,332 @@ const HomePage: React.FC = () => {
     },
     {
       id: 7,
-      title: 'Eco-Tourism Adventure Packages',
-      description: 'Sustainable tourism packages focusing on local culture, wildlife, and environmental conservation.',
-      category: 'Travel & Tourism',
-      sector: 'Tourism',
+      title: 'Eco-Friendly Cleaning Products',
+      description: 'Natural cleaning products made from locally sourced ingredients, targeting health-conscious consumers.',
+      category: 'Manufacturing',
+      sector: 'Manufacturing',
       investmentNeeded: 1200000,
       expertiseNeeded: 'Easy',
-      specialAdvantages: ['Rural communities benefit from tourism revenue'],
+      specialAdvantages: ['Women entrepreneurs can start from home with minimal investment'],
       difficultyLevel: 'Easy',
-      imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=250&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=250&fit=crop',
+      isActive: true,
+      targetAudience: ['Manufacturing']
+    },
+    {
+      id: 8,
+      title: 'Online Tutoring Platform',
+      description: 'Digital platform connecting students with qualified tutors for personalized learning experiences.',
+      category: 'Education',
+      sector: 'Service',
+      investmentNeeded: 300000,
+      expertiseNeeded: 'Easy',
+      specialAdvantages: ['Teachers can earn extra income from home'],
+      difficultyLevel: 'Easy',
+      imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop',
       isActive: true,
       targetAudience: ['Service Ideas']
     },
     {
-      id: 8,
-      title: 'Telemedicine Platform for Rural Areas',
-      description: 'Digital healthcare platform connecting rural patients with specialists through video consultations and health monitoring.',
-      category: 'Technology',
-      sector: 'Healthcare',
-      investmentNeeded: 3000000,
-      expertiseNeeded: 'Challenging',
-      specialAdvantages: ['Government healthcare initiatives provide support and funding'],
-      difficultyLevel: 'Challenging',
-      imageUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400&h=250&fit=crop',
+      id: 9,
+      title: 'Artisanal Coffee Roasting',
+      description: 'Small-batch coffee roasting business focusing on premium quality and unique flavor profiles.',
+      category: 'Food & Beverage',
+      sector: 'Food',
+      investmentNeeded: 1500000,
+      expertiseNeeded: 'Moderate',
+      specialAdvantages: ['Coffee farmers get better prices through direct sourcing'],
+      difficultyLevel: 'Moderate',
+      imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=250&fit=crop',
       isActive: true,
-      targetAudience: ['Rural Focused']
+      targetAudience: ['Food & Beverage']
+    },
+    {
+      id: 10,
+      title: 'Digital Marketing Agency',
+      description: 'Full-service digital marketing agency specializing in social media, SEO, and content marketing.',
+      category: 'Professional Services',
+      sector: 'Service',
+      investmentNeeded: 500000,
+      expertiseNeeded: 'Moderate',
+      specialAdvantages: ['Freelancers can collaborate remotely'],
+      difficultyLevel: 'Moderate',
+      imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
+      isActive: true,
+      targetAudience: ['Service Ideas']
+    },
+         {
+       id: 11,
+       title: 'Handmade Jewelry Business',
+       description: 'Artisanal jewelry making using traditional techniques and modern designs for the fashion-conscious market.',
+       category: 'Fashion',
+       sector: 'Manufacturing',
+       investmentNeeded: 600000,
+       expertiseNeeded: 'Easy',
+       specialAdvantages: ['Artisans preserve traditional craftsmanship'],
+       difficultyLevel: 'Easy',
+       imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=250&fit=crop',
+       isActive: true,
+       targetAudience: ['Manufacturing']
+     },
+    {
+      id: 12,
+      title: 'Pet Care Services',
+      description: 'Comprehensive pet care services including grooming, walking, and pet sitting for busy pet owners.',
+      category: 'Professional Services',
+      sector: 'Service',
+      investmentNeeded: 300000,
+      expertiseNeeded: 'Easy',
+      specialAdvantages: ['Animal lovers can turn passion into business'],
+      difficultyLevel: 'Easy',
+      imageUrl: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=400&h=250&fit=crop',
+      isActive: true,
+      targetAudience: ['Service Ideas']
     }
   ];
 
+  const categories = [
+    'Technology',
+    'Agriculture', 
+    'Fashion',
+    'Food & Beverage',
+    'Manufacturing',
+    'Professional Services',
+    'Education',
+    'For Women'
+  ];
+
+  const locations = [
+    'India',
+    'USA',
+    'Europe',
+    'Canada',
+    'Australia',
+    'UK',
+    'Germany',
+    'France'
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
       <Header />
       
+      {/* Category Icons Section */}
+      <section className="bg-gradient-to-r from-gray-50 to-white py-4 border-b border-gray-200 w-full relative z-0">
+        <div className="w-full max-w-7xl mx-auto px-2 sm:px-4">
+          <div className="flex justify-center space-x-4 sm:space-x-8 overflow-x-auto">
+            {[
+              { 
+                title: "For Women", 
+                icon: IoWomanOutline, 
+                color: "bg-gradient-to-br from-pink-400 to-pink-600",
+                hoverColor: "hover:from-pink-500 hover:to-pink-700"
+              },
+              { 
+                title: "Technology", 
+                icon: FaLaptopCode, 
+                color: "bg-gradient-to-br from-blue-400 to-blue-600",
+                hoverColor: "hover:from-blue-500 hover:to-blue-700"
+              },
+              { 
+                title: "Agriculture", 
+                icon: GiFarmTractor, 
+                color: "bg-gradient-to-br from-green-400 to-green-600",
+                hoverColor: "hover:from-green-500 hover:to-green-700"
+              },
+              { 
+                title: "Manufacturing", 
+                icon: MdEngineering, 
+                color: "bg-gradient-to-br from-purple-400 to-purple-600",
+                hoverColor: "hover:from-purple-500 hover:to-purple-700"
+              },
+              { 
+                title: "Food & Beverage", 
+                icon: IoRestaurantOutline, 
+                color: "bg-gradient-to-br from-orange-400 to-orange-600",
+                hoverColor: "hover:from-orange-500 hover:to-orange-700"
+              },
+              { 
+                title: "Fashion", 
+                icon: GiDress, 
+                color: "bg-gradient-to-br from-red-400 to-red-600",
+                hoverColor: "hover:from-red-500 hover:to-red-700"
+              },
+              { 
+                title: "Services", 
+                icon: FaUser, 
+                color: "bg-gradient-to-br from-teal-400 to-teal-600",
+                hoverColor: "hover:from-teal-500 hover:to-teal-700"
+              }
+            ].map((category, index) => {
+              const IconComponent = category.icon;
+              return (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setActiveTab('All Ideas');
+                    navigate('/all-ideas');
+                  }}
+                  className="flex flex-col items-center cursor-pointer group flex-shrink-0"
+                >
+                  <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full ${category.color} ${category.hoverColor} flex items-center justify-center mb-2 sm:mb-3 shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105 relative z-0`}>
+                    <IconComponent className="text-white text-2xl sm:text-3xl" />
+                  </div>
+                  <span className="text-xs sm:text-sm font-medium text-gray-700 text-center group-hover:text-blue-600 transition-colors duration-300">
+                    {category.title}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Filter Bar */}
+      <section className="bg-blue-600 border-b border-blue-700 shadow-sm w-full">
+        <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 py-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
+            {/* Search Input */}
+            <div className="flex-1 min-w-0 relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaSearch className="h-4 w-4 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search ideas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base bg-white"
+              />
+            </div>
+
+            {/* Category Dropdown */}
+            <div className="relative flex-1 min-w-0">
+              <button
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                className="w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-lg bg-white text-left text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <span className={selectedCategory ? "text-gray-900" : "text-gray-500"}>
+                  {selectedCategory || "Select Category"}
+                </span>
+                <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${isCategoryOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {isCategoryOpen && (
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-60 overflow-y-auto min-w-[150px] max-w-xs">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => {
+                        setSelectedCategory(category);
+                        setIsCategoryOpen(false);
+                      }}
+                      className="w-full px-3 py-2 text-left text-sm sm:text-base hover:bg-gray-100 focus:bg-gray-100 focus:outline-none first:rounded-t-lg last:rounded-b-lg"
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Location Dropdown */}
+            <div className="relative flex-1 min-w-0">
+              <button
+                onClick={() => setIsLocationOpen(!isLocationOpen)}
+                className="w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-lg bg-white text-left text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <span className={selectedLocation ? "text-gray-900" : "text-gray-500"}>
+                  {selectedLocation || "Select Location"}
+                </span>
+                <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${isLocationOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {isLocationOpen && (
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-60 overflow-y-auto min-w-[150px] max-w-xs">
+                  {locations.map((location) => (
+                    <button
+                      key={location}
+                      onClick={() => {
+                        setSelectedLocation(location);
+                        setIsLocationOpen(false);
+                      }}
+                      className="w-full px-3 py-2 text-left text-sm sm:text-base hover:bg-gray-100 focus:bg-gray-100 focus:outline-none first:rounded-t-lg last:rounded-b-lg"
+                    >
+                      {location}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 w-full">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
-          <div className="container mx-auto px-4">
+        <section className="bg-gradient-to-r from-yellow-300 to-yellow-400 text-gray-800 py-8 relative overflow-hidden w-full">
+          {/* 3D Decorative Elements */}
+          <div className="absolute top-8 left-8 w-6 h-6 bg-white rounded-full opacity-60 animate-bounce"></div>
+          <div className="absolute top-16 right-32 w-4 h-4 bg-blue-600 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-16 left-16 w-8 h-8 bg-white rounded-full opacity-40 animate-bounce" style={{ animationDelay: '1s' }}></div>
+          
+          {/* Curved Background Elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 border-4 border-white opacity-20 rounded-full"></div>
+          <div className="absolute bottom-0 right-32 w-64 h-64 border-2 border-white opacity-15 rounded-full"></div>
+          
+          {/* Random Business/Startup Icons - Scattered */}
+          <div className="absolute top-12 left-16 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '0.2s' }}>
+            <FaLightbulb className="text-white text-lg" />
+          </div>
+          
+          <div className="absolute top-24 right-20 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-bounce" style={{ animationDelay: '0.8s' }}>
+            <FaRocket className="text-white text-sm" />
+          </div>
+          
+          <div className="absolute top-1/3 left-8 w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '0.4s' }}>
+            <FaLaptopCode className="text-white text-xl" />
+          </div>
+          
+          <div className="absolute top-1/4 right-12 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg animate-bounce" style={{ animationDelay: '1.2s' }}>
+            <FaUser className="text-yellow-500 text-lg" />
+          </div>
+          
+          <div className="absolute bottom-1/3 left-24 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '0.6s' }}>
+            <FaEnvelope className="text-white text-sm" />
+          </div>
+          
+          <div className="absolute bottom-1/4 right-8 w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg animate-bounce" style={{ animationDelay: '1s' }}>
+            <FaLightbulb className="text-white text-xl" />
+          </div>
+          
+          <div className="absolute top-1/2 left-32 w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '0.3s' }}>
+            <FaRocket className="text-white text-lg" />
+          </div>
+          
+          <div className="absolute bottom-12 right-24 w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center shadow-lg animate-bounce" style={{ animationDelay: '0.9s' }}>
+            <FaLaptopCode className="text-white text-sm" />
+          </div>
+          
+          <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 relative z-10">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-6 transform hover:scale-105 transition-transform duration-300 text-gray-800 drop-shadow-lg">
                 Discover 10,000+ Business Ideas
               </h1>
-              <p className="text-xl mb-8">
+              <p className="text-lg sm:text-xl mb-8 text-gray-700 drop-shadow-md">
                 Find the perfect business opportunity that matches your skills and investment capacity
               </p>
-              <div className="flex justify-center space-x-4">
+              <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-0">
                 <button
                   onClick={() => openAuthModal('signup')}
-                  className="bg-yellow-400 text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
+                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Get Started
                 </button>
                 <button
                   onClick={() => openAuthModal('signin')}
-                  className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors"
+                  className="border-2 border-gray-800 text-gray-800 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-800 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Sign In
                 </button>
@@ -302,27 +563,15 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Categories Section */}
-        <section className="py-8 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex justify-center space-x-8">
-              {MAIN_CATEGORIES.map((category, index) => (
-                <div key={index} className="flex flex-col items-center cursor-pointer group">
-                  <div className={`w-20 h-20 rounded-full ${category.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-                    {React.createElement(iconMap[category.icon as keyof typeof iconMap], { className: "text-blue-900 text-4xl" })}
-                  </div>
-                  <span className="text-sm text-gray-700 text-center">{category.title}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
+                 {/* Main Content and Right Panel Layout */}
+         <section className="py-2 bg-white w-full">
+           <div className="w-full max-w-7xl mx-auto px-2 sm:px-4">
+             <div className="flex flex-col lg:flex-row gap-4">
+               {/* Main Content */}
+               <div className="flex-[0.8] min-w-0">
         {/* Find Your Idea Section */}
-        <section className="py-8 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900">Find Your Idea</h2>
+                <div className="mb-4">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex space-x-2">
                 <button 
                   onClick={() => {
@@ -346,15 +595,10 @@ const HomePage: React.FC = () => {
             </div>
             <div 
               id="find-ideas-scroll"
-              className="flex space-x-6 overflow-x-auto scrollbar-hide pb-4"
+              className="flex space-x-4 sm:space-x-6 overflow-x-auto scrollbar-hide pb-4 w-full"
               style={{ scrollSnapType: 'x mandatory' }}
             >
               {[
-                {
-                  title: "For Talkative Women",
-                  image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-                  bgColor: "bg-yellow-400"
-                },
                 {
                   title: "5AM Business Ideas", 
                   image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
@@ -388,15 +632,15 @@ const HomePage: React.FC = () => {
               ].map((idea, index) => (
                 <div 
                   key={index} 
-                  className="flex-shrink-0 w-80 cursor-pointer group"
+                  className="flex-shrink-0 w-64 sm:w-80 cursor-pointer group"
                   style={{ scrollSnapAlign: 'start' }}
                   onClick={() => {
                     setActiveTab('All Ideas');
                     navigate('/all-ideas');
                   }}
                 >
-                  <div className={`${idea.bgColor} rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105`}>
-                    <div className="h-48 overflow-hidden bg-gray-200">
+                  <div className={`${idea.bgColor} rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full`}>
+                    <div className="h-40 sm:h-48 overflow-hidden bg-gray-200">
                       <img 
                         src={idea.image} 
                         alt={idea.title}
@@ -407,93 +651,185 @@ const HomePage: React.FC = () => {
                         }}
                       />
                     </div>
-                    <div className="p-4 text-center">
-                      <h3 className="font-bold text-gray-900 text-lg">{idea.title}</h3>
+                    <div className="p-3 sm:p-4 text-center">
+                      <h3 className="font-bold text-gray-900 text-sm sm:text-lg">{idea.title}</h3>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </section>
 
         {/* Featured Ideas Section */}
-        <section className="py-12 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">Featured Ideas</h2>
-              <div className="flex items-center space-x-4">
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={() => {
-                      const container = document.getElementById('featured-ideas-scroll');
-                      container?.scrollBy({ left: -320, behavior: 'smooth' });
-                    }}
-                    className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
-                  >
-                    <FaChevronLeft className="text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => {
-                      const container = document.getElementById('featured-ideas-scroll');
-                      container?.scrollBy({ left: 320, behavior: 'smooth' });
-                    }}
-                    className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
-                  >
-                    <FaChevronRight className="text-gray-600" />
-                  </button>
-                </div>
-                <button
-                  onClick={() => {
-                    setActiveTab('All Ideas');
-                    navigate('/all-ideas');
-                  }}
-                  className="text-blue-900 font-semibold hover:underline"
-                >
-                  View All
-                </button>
+                   <section className="pt-2 pb-4 bg-gray-50 rounded-xl w-full">
+                     <div className="px-2 sm:px-4">
+               <div className="flex items-center justify-between mb-4">
+                 <button
+                   onClick={() => {
+                     setActiveTab('All Ideas');
+                     navigate('/all-ideas');
+                   }}
+                   className="text-blue-900 font-semibold hover:underline text-sm sm:text-base"
+                 >
+                   View All
+                 </button>
+               </div>
+               
+                       <div 
+                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 w-full"
+                       >
+                 {featuredIdeas.map((idea) => (
+                   <div 
+                     key={idea.id} 
+                     className="w-full"
+                   >
+                     <IdeaCard
+                       idea={idea}
+                       onClick={handleIdeaClick}
+                     />
+                   </div>
+                 ))}
+                       </div>
+                     </div>
+                   </section>
               </div>
-            </div>
-            
-            <div 
-              id="featured-ideas-scroll"
-              className="flex space-x-6 overflow-x-auto scrollbar-hide pb-4"
-              style={{ scrollSnapType: 'x mandatory' }}
-            >
-              {featuredIdeas.map((idea) => (
-                <div 
-                  key={idea.id} 
-                  className="flex-shrink-0 w-80"
-                  style={{ scrollSnapAlign: 'start' }}
-                >
-                  <IdeaCard
-                    idea={idea}
-                    onClick={handleIdeaClick}
-                  />
+
+                             {/* Right Side Panel */}
+               <div className="flex-[0.2] min-w-0">
+                 <div className="lg:sticky lg:top-8 space-y-4 w-full">
+                                     {/* Classifieds Section */}
+                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden w-full">
+                     <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-2 sm:px-3 py-2">
+                       <h3 className="text-sm sm:text-base font-bold text-white flex items-center">
+                         <FaNewspaper className="mr-2" />
+                         Classifieds
+                       </h3>
+                     </div>
+                     <div className="p-2 sm:p-3 space-y-2">
+                      {[
+                        {
+                          title: "New Business Opportunity",
+                          description: "Local restaurant looking for delivery partners",
+                          date: "2 hours ago",
+                          icon: "🍕"
+                        },
+                        {
+                          title: "Investment Opportunity",
+                          description: "Tech startup seeking angel investors",
+                          date: "5 hours ago",
+                          icon: "💼"
+                        },
+                        {
+                          title: "Partnership Available",
+                          description: "E-commerce platform seeking suppliers",
+                          date: "1 day ago",
+                          icon: "🤝"
+                        },
+                        {
+                          title: "Franchise Opportunity",
+                          description: "Popular coffee chain expanding",
+                          date: "2 days ago",
+                          icon: "☕"
+                        }
+                      ].map((item, index) => (
+                                                 <div key={index} className="flex items-start space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+                           <div className="text-lg sm:text-xl">{item.icon}</div>
+                           <div className="flex-1 min-w-0">
+                             <h4 className="font-semibold text-gray-900 text-xs truncate">{item.title}</h4>
+                             <p className="text-gray-600 text-xs mt-1">{item.description}</p>
+                             <p className="text-gray-400 text-xs mt-1">{item.date}</p>
+                           </div>
+                         </div>
+                      ))}
+                    </div>
+                  </div>
+
+                                     {/* Resources Section */}
+                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden w-full">
+                     <div className="bg-gradient-to-r from-green-600 to-green-700 px-2 sm:px-3 py-2">
+                       <h3 className="text-sm sm:text-base font-bold text-white flex items-center">
+                         <FaBook className="mr-2" />
+                         Resources
+                       </h3>
+                     </div>
+                     <div className="p-2 sm:p-3 space-y-2">
+                      {[
+                        {
+                          title: "Business Plan Template",
+                          description: "Free downloadable templates",
+                          icon: "📋",
+                          link: "#"
+                        },
+                        {
+                          title: "Funding Guide",
+                          description: "Complete guide to business funding",
+                          icon: "💰",
+                          link: "#"
+                        },
+                        {
+                          title: "Market Research Tools",
+                          description: "Tools for market analysis",
+                          icon: "📊",
+                          link: "#"
+                        },
+                        {
+                          title: "Legal Resources",
+                          description: "Business registration & compliance",
+                          icon: "⚖️",
+                          link: "#"
+                        },
+                        {
+                          title: "Mentorship Program",
+                          description: "Connect with experienced entrepreneurs",
+                          icon: "👨‍💼",
+                          link: "#"
+                        },
+                        {
+                          title: "Success Stories",
+                          description: "Real entrepreneur success stories",
+                          icon: "🏆",
+                          link: "#"
+                        }
+                      ].map((resource, index) => (
+                                                 <a 
+                           key={index} 
+                           href={resource.link}
+                           className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group"
+                         >
+                           <div className="text-base sm:text-lg group-hover:scale-110 transition-transform">{resource.icon}</div>
+                           <div className="flex-1 min-w-0">
+                             <h4 className="font-semibold text-gray-900 text-xs group-hover:text-blue-600 transition-colors">{resource.title}</h4>
+                             <p className="text-gray-600 text-xs mt-1">{resource.description}</p>
+                           </div>
+                           <FaChevronRight className="text-gray-400 text-xs group-hover:text-blue-600 transition-colors" />
+                         </a>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </section>
 
         {/* Newsletter Signup Section */}
-        <section className="py-8 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
-          <div className="max-w-2xl mx-auto px-4">
-            <div className="text-center mb-6">
-              <h2 className="text-3xl font-bold text-white mb-3">
+        <section className="py-4 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 w-full">
+          <div className="w-full max-w-2xl mx-auto px-2 sm:px-4">
+            <div className="text-center mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
                 Stay Ahead with Fresh Ideas! 💡
               </h2>
-              <p className="text-lg text-blue-100">
+              <p className="text-base sm:text-lg text-blue-100">
                 Get the latest business ideas and startup tips delivered to your inbox
               </p>
             </div>
 
             {/* Centered Newsletter Form */}
             <div className="flex justify-center">
-              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 max-w-sm w-full">
-                <div className="mb-4 text-center">
-                  <h3 className="text-xl font-bold text-white mb-1">Join 10,000+ Entrepreneurs</h3>
-                  <p className="text-base text-blue-100">Weekly ideas that grow your business</p>
+              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-3 sm:p-4 shadow-xl border border-white/20 w-full max-w-sm">
+                <div className="mb-3 text-center">
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-1">Join 10,000+ Entrepreneurs</h3>
+                  <p className="text-sm sm:text-base text-blue-100">Weekly ideas that grow your business</p>
                 </div>
                 
                 <form className="space-y-3">
@@ -501,22 +837,22 @@ const HomePage: React.FC = () => {
                     <input
                       type="email"
                       placeholder="Enter your email address"
-                      className="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent backdrop-blur-sm text-base"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent backdrop-blur-sm text-sm sm:text-base"
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <FaEnvelope className="text-blue-200 text-base" />
+                      <FaEnvelope className="text-blue-200 text-sm sm:text-base" />
                     </div>
                   </div>
                   
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-blue-900 font-bold py-3 px-4 rounded-xl hover:from-yellow-300 hover:to-yellow-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-base"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-blue-900 font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-xl hover:from-yellow-300 hover:to-yellow-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                   >
                     Subscribe Now 🚀
                   </button>
                 </form>
                 
-                <p className="text-blue-200 text-sm mt-3 text-center">
+                <p className="text-blue-200 text-xs sm:text-sm mt-2 text-center">
                   ✨ No spam, unsubscribe anytime
                 </p>
               </div>
@@ -531,8 +867,6 @@ const HomePage: React.FC = () => {
       <AuthModal 
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
-        initialMode={authModalMode}
-        onAuthSuccess={handleAuthSuccess}
       />
     </div>
   );
@@ -552,7 +886,24 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 overflow-x-hidden" style={{ boxSizing: 'border-box' }}>
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              * {
+                box-sizing: border-box;
+              }
+              body {
+                overflow-x: hidden;
+              }
+              .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+              }
+              .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+              }
+            `
+          }} />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutUsPage />} />

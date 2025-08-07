@@ -8,19 +8,12 @@ import com.ideafactory.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "${spring.web.cors.allowed-origins}")
 public class AdminAuthController {
-    
-    @Autowired
-    private AuthenticationManager authenticationManager;
     
     @Autowired
     private AdminService adminService;
@@ -39,13 +32,11 @@ public class AdminAuthController {
                     .body(new ApiResponse(false, "Invalid credentials or account disabled"));
             }
             
-            // Authenticate with Spring Security
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    admin.getUsername(),
-                    loginRequest.getPassword()
-                )
-            );
+            // Manually validate password using AdminService
+            if (!adminService.validatePassword(loginRequest.getPassword(), admin.getPassword())) {
+                return ResponseEntity.badRequest()
+                    .body(new ApiResponse(false, "Invalid credentials"));
+            }
             
             // Generate JWT token
             String token = jwtTokenUtil.generateToken(admin.getUsername(), admin.getRole().name());
@@ -64,9 +55,6 @@ public class AdminAuthController {
             
             return ResponseEntity.ok(response);
             
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.badRequest()
-                .body(new ApiResponse(false, "Invalid credentials"));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                 .body(new ApiResponse(false, "Login failed: " + e.getMessage()));

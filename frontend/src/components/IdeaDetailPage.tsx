@@ -671,13 +671,7 @@ const IdeaDetailPage: React.FC<IdeaDetailPageProps> = ({ onBack }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        activeTab=""
-        setActiveTab={() => {}}
-        isUserSignedIn={isUserSignedIn}
-        openAuthModal={openAuthModal}
-        handleSignOut={handleSignOut}
-      />
+      <Header />
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white">

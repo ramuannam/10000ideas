@@ -79,8 +79,6 @@ const SubmitIdeaPage: React.FC = () => {
       <AuthModal 
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
-        initialMode={authModalMode}
-        onAuthSuccess={handleAuthSuccess}
       />
     </div>
   );

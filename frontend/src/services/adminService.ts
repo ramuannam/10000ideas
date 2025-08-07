@@ -1,4 +1,4 @@
-import { ADMIN_API_BASE_URL } from '../config/config';
+import { API_BASE_URL } from '../config/config';
 
 interface LoginRequest {
   usernameOrEmail: string;
@@ -48,36 +48,57 @@ export interface UploadHistoryStats {
 }
 
 class AdminService {
-  private baseURL = `${ADMIN_API_BASE_URL}/auth`;
-  private adminBaseURL = ADMIN_API_BASE_URL;
+  private baseURL = `${API_BASE_URL}/auth`;
+  private adminBaseURL = API_BASE_URL;
 
   // Admin login
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const response = await fetch(`${this.baseURL}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    });
+    try {
+      const response = await fetch(`${this.baseURL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Login failed');
+      console.log('Login response status:', response.status);
+      console.log('Login response headers:', response.headers);
+
+      if (!response.ok) {
+        let errorMessage = 'Login failed';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+          // If response is not JSON, try to get text
+          try {
+            const textResponse = await response.text();
+            errorMessage = textResponse || errorMessage;
+          } catch (textError) {
+            errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+          }
+        }
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      console.log('Login response data:', data);
+      
+      // Store token in localStorage
+      this.setToken(data.token);
+      this.setUserInfo({
+        username: data.username,
+        email: data.email,
+        fullName: data.fullName,
+        role: data.role,
+      });
+
+      return data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
-
-    const data = await response.json();
-    
-    // Store token in localStorage
-    this.setToken(data.token);
-    this.setUserInfo({
-      username: data.username,
-      email: data.email,
-      fullName: data.fullName,
-      role: data.role,
-    });
-
-    return data;
   }
 
   // Logout

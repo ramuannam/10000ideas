@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTh, FaList } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 import AuthModal from '../components/AuthModal';
@@ -12,6 +13,16 @@ const AllIdeasPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('All Ideas');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { isAuthModalOpen, closeAuthModal, authModalMode, setAuthModalMode } = useAuth();
+  const location = useLocation();
+
+  // Handle selected category from navigation
+  useEffect(() => {
+    if (location.state?.selectedCategory) {
+      const selectedCategory = location.state.selectedCategory;
+      // Apply the category filter
+      handleFilterChange({ ...filters, category: selectedCategory });
+    }
+  }, [location.state]);
 
   const {
     filteredIdeas,
@@ -202,8 +213,6 @@ const AllIdeasPage: React.FC = () => {
       <AuthModal 
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
-        initialMode={authModalMode}
-        onAuthSuccess={handleAuthSuccess}
       />
     </div>
   );
